@@ -340,12 +340,14 @@ import * as socketStuff from "./socketinit.js";
         for (let e of document.getElementById("optColors").children) {
             if (e.value === "custom") customPlate = e;
         }
-        let {name, author} = getThemeDisplayName(themeValue);
-        if (name !== 'null') customPlate.textContent = `Custom - ${name} ${author}`;
-        themeValue.addEventListener("input", () => {
-            let {name, author} = getThemeDisplayName(themeValue);
-            customPlate.textContent = `Custom - ${name} ${author}`;
-        });
+        let { name, author } = getThemeDisplayName(themeValue);
+        if (customPlate) {
+            if (name !== 'null') customPlate.textContent = `Custom - ${name} ${author}`;
+            themeValue.addEventListener("input", () => {
+                let {name, author} = getThemeDisplayName(themeValue);
+                customPlate.textContent = `Custom - ${name} ${author}`;
+            });
+        }
     }
 
     function snowAndFireworkEffects() {
@@ -625,20 +627,12 @@ import * as socketStuff from "./socketinit.js";
                 content.guiblack,
             ]) {
                 if (!/^#[0-9a-fA-F]{6}$/.test(colorHex)) {
-                    if (!content.aqua) { // old themes don't have aqua, so just warn the user
-                        alert("Your theme does not an entry for \"aqua\" (the color used by Hexagons). A fallback has been provided.");
-                        content.aqua = content.teal;
-                    } else if (!content.lavender) { // same for lavender.
-                        alert("Your theme does not an entry for \"lavender\" (the color used by the nest). A fallback has been provided.");
-                        content.lavender = "#b58efd";
-                    } else {
-                        if (logError) { 
-                            throw new Error("Unable to read the theme"); 
-                        } else return {
-                            name: 'Unknown Theme',
-                            author: '?',
-                            content: null,
-                        }
+                    if (logError) { 
+                        throw new Error("Unable to read the theme"); 
+                    } else return {
+                        name: 'Unknown Theme',
+                        author: '?',
+                        content: null,
                     }
                 };
             }
@@ -1074,7 +1068,7 @@ import * as socketStuff from "./socketinit.js";
     const fontWidth = "bold";
     function measureText(text, fontSize, withHeight = false) {
         fontSize += config.graphical.fontSizeBoost;
-        ctx[2].font = fontWidth + " " + fontSize + "px Ubuntu";
+        ctx[2].font = fontWidth + " " + fontSize + "px Roboto";
         let measurement = ctx[2].measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
         return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
     }
@@ -1115,7 +1109,7 @@ import * as socketStuff from "./socketinit.js";
         if (ratio !== 1) {
             size *= ratio;
         }
-        context.font = "bold " + size + "px Ubuntu";
+        context.font = "bold " + size + "px Roboto";
 
         let Xoffset = offset,
             Yoffset = (size + 2 * offset) / 2,
@@ -2882,10 +2876,10 @@ import * as socketStuff from "./socketinit.js";
         let ping = global.metrics.latency.reduce((b, a) => b + a, 1) / global.metrics.latency.length - 1;
         let xloc = global.player.renderx / 30;
         let yloc = global.player.rendery / 30;
-        let watermarkText = "Open Source Arras";
+        let watermarkText = "titanclad.io";
         let length = Math.max(measureText(watermarkText, 32)) / 12;
         let watermarkTextPos1 = Math.round(x + len / 2) + 0.5;
-        let watermarkColor = gameDraw.getColor({gradient: true, asset: [{color: `${color.blue}`}, {color: `${color.green}`}]}, ctx[2], watermarkTextPos1 - length, length * 0.07, watermarkTextPos1 + length, 0);
+        let watermarkColor = gameDraw.getColor({gradient: true, asset: [{color: `${color.lgreen}`}, {color: `${color.purple}`}]}, ctx[2], watermarkTextPos1 - length, length * 0.07, watermarkTextPos1 + length, 0);
         if (global.showDebug) {
             let getRenderingInfo = (data, isTurret) => {
                 isTurret ? global.renderingInfo.turretEntities += data.length : global.renderingInfo.entities += data.length;
@@ -3988,7 +3982,7 @@ import * as socketStuff from "./socketinit.js";
                 ctx[2].globalAlpha = anim;
 
                 // FONT (matches the screenshot exactly)
-                ctx[2].font = "bold 16px Ubuntu";  // bold + larger
+                ctx[2].font = "bold 16px Roboto";  // bold + larger
                 ctx[2].textAlign = "left";
                 ctx[2].textBaseline = "middle";
 

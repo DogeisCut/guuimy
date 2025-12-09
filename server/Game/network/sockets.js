@@ -1200,7 +1200,7 @@ class socketManager {
 
     preparePlayer(socket, player, body, doNotTakeAction = {}) {
         // Decide what to do about colors when sending updates and stuff
-        player.teamColor = new Color(!Config.random_body_colors && (Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag)) ? 10 : global.getTeamColor(body.team)).compiled; // blue
+        player.teamColor = new Color(!Config.random_body_colors && (Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag)) ? 1 : global.getTeamColor(body.team)).compiled; // lgreen
         // Set up the targeting structure
         player.target = { x: 0, y: 0 };
         // Set up the command structure
@@ -1344,7 +1344,7 @@ class socketManager {
             if (player.body.id === e.master.id) {
                 data = data.slice(); // So we don't mess up references to the original
                 // Set the proper color if it's on our team and decide what to do about colors when sending updates and stuff
-                player.teamColor = new Color(!Config.random_body_colors && (Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag)) ? 10 : global.getTeamColor(player.body.team)).compiled; // blue
+                player.teamColor = new Color(!Config.random_body_colors && (Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag)) ? 1 : global.getTeamColor(player.body.team)).compiled; // lgreen
                 // And make it force to our mouse if it ought to
                 if (player.command.autospin) {
                     data[10] = 1;
@@ -1698,7 +1698,6 @@ class socketManager {
                 if (is === 0) break;
                 let entry = list[top];
                 let color = entry.leaderboardColor ? entry.leaderboardColor + " 0 1 0 false" 
-                    : Config.groups || (Config.mode == 'ffa' && !Config.tag) ? '11 0 1 0 false'
                     : entry.color.compiled;
                 topTen.push({
                     id: entry.id,
@@ -1706,7 +1705,7 @@ class socketManager {
                         Math.round(entry.skill.score),
                         entry.index,
                         entry.name,
-                        entry.leaderboardColor ? color : Config.mode == 'ffa' && !Config.tag ? '12 0 1 0 false' : color,
+                        entry.leaderboardColor ? color : color,
                         color,
                         entry.nameColor || "#FFFFFF",
                         entry.label,
@@ -1785,7 +1784,7 @@ class socketManager {
                         data: [
                             util.clamp(Math.floor((256 * my.x) / global.gameManager.room.width), -128, 127),
                             util.clamp(Math.floor((256 * my.y) / global.gameManager.room.height), -128, 127),
-                            my.minimapColor ? my.minimapColor + " 0 1 0 false" : Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag) ? '10 0 1 0 false' : my.color.compiled,
+                            my.minimapColor ? my.minimapColor + " 0 1 0 false" : Config.groups || my.color.compiled,
                         ],
                     });
                 }
@@ -1800,7 +1799,7 @@ class socketManager {
                         data: [
                             util.clamp(Math.floor((256 * my.x) / global.gameManager.room.width), -128, 127),
                             util.clamp(Math.floor((256 * my.y) / global.gameManager.room.height), -128, 127),
-                            my.minimapColor ? my.minimapColor + " 0 1 0 false" : Config.groups || (Config.mode == 'ffa' || Config.mode == 'clan' && !Config.tag) ? '12 0 1 0 false' : my.color.compiled,
+                            my.minimapColor ? my.minimapColor + " 0 1 0 false" : Config.groups || my.color.compiled,
                         ],
                     });
                 }

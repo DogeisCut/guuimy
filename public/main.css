@@ -37,7 +37,7 @@ body {
 }
 
 body {
-  font-family: Ubuntu;
+  font-family: Roboto;
   font-size: 14px;
   background-color: #484848;
 }
@@ -76,7 +76,7 @@ h1 {
   padding: 0 12px;
   margin: 0;
   text-align: center;
-  font: bold 40px/1.5 Ubuntu;
+  font: bold 40px/1.5 Roboto;
 }
 
 body.mobile .icon {
@@ -91,7 +91,7 @@ body.mobile h1 {
 div.optionsHeader {
   display: block;
   margin: 8px 0 3px;
-  font: bold 13px/1 Ubuntu;
+  font: bold 13px/1 Roboto;
   color: #000;
   text-align: center;
 }
@@ -125,7 +125,7 @@ h3 {
 .horizontalSelector {
   padding: 4px 0;
   margin-bottom: 4px;
-  font: bold 12px Ubuntu;
+  font: bold 12px Roboto;
   text-align: center;
   overflow: auto hidden;
   scrollbar-width: none;
@@ -247,7 +247,7 @@ input {
   margin-top: 5px;
   margin-bottom: 5px;
   outline: none;
-  font-family: Ubuntu;
+  font-family: Roboto;
   font-weight: bold;
   background: #fff;
   transition: border 0.3s, background 0.3s, color 0.3s;
@@ -338,7 +338,7 @@ input.error {
   color: black;
   background-color: transparent;
   box-sizing: border-box;
-  font: bold 19.7136px / 34.5417px Ubuntu;
+  font: bold 19.7136px / 34.5417px Roboto;
   text-align: left;
   padding: 10px;
   margin-top: 5px;
@@ -442,7 +442,7 @@ body.mobile .startMenuHolder.changelogHolder {
 }
 
 .menuTab {
-  font: 13px/28px Ubuntu;
+  font: 13px/28px Roboto;
   padding: 6px 11px;
   border-radius: 5px 5px 0 0;
   color: #fff !important;
@@ -632,7 +632,7 @@ body.mobile .mobileOptions {
 body.mobile .mobileOptionsHeader {
   display: block;
   margin: 10px 0 4px;
-  font: bold 13px/1 Ubuntu;
+  font: bold 13px/1 Roboto;
   color: #000000;
   text-align: center;
 }
@@ -731,7 +731,7 @@ body.mobile .startMenuSlidingContent {
   cursor: pointer;
   box-shadow: inset 0 -2px #8abc3f;
   border-radius: 5px;
-  font: 16px Ubuntu;
+  font: 16px Roboto;
 }
 
 #startButton:hover {
@@ -763,7 +763,7 @@ body.mobile .startMenuSlidingContent {
   cursor: pointer;
   box-shadow: inset 0 -2px #5b6dae;
   border-radius: 5px;
-  font: 16px Ubuntu;
+  font: 16px Roboto;
 }
 
 #discordButton:hover {
@@ -795,7 +795,7 @@ body.mobile .startMenuSlidingContent {
   cursor: pointer;
   box-shadow: inset 0 -2px #c53700;
   border-radius: 5px;
-  font: 16px Ubuntu;
+  font: 16px Roboto;
 }
 
 #redditButton:hover {
@@ -827,7 +827,7 @@ body.mobile .startMenuSlidingContent {
   cursor: pointer;
   box-shadow: inset 0 -2px #c51200;
   border-radius: 5px;
-  font: 16px Ubuntu;
+  font: 16px Roboto;
 }
 
 #youtubeButton:hover {
@@ -859,7 +859,7 @@ body.mobile .startMenuSlidingContent {
   cursor: pointer;
   box-shadow: inset 0 -2px #5926a6;
   border-radius: 5px;
-  font: 16px Ubuntu;
+  font: 16px Roboto;
 }
 
 #githubButton:hover {
@@ -912,7 +912,7 @@ body.mobile .startMenuSlidingContent {
 .count {
   display: inline-block;
   width: 20px;
-  font: bold 12px Ubuntu;
+  font: bold 12px Roboto;
 }
 
 .count span {
@@ -1029,7 +1029,7 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  font: 13px/1 Ubuntu;
+  font: 13px/1 Roboto;
   padding: 2px 28px 2px 8px;
   height: 21px;
   margin-left: 3px;
@@ -1073,7 +1073,7 @@ select:active {
   border-radius: 50%;
   text-align: center;
   background: rgb(0, 0, 0, 0.6);
-  font: bold 10px/15px Ubuntu;
+  font: bold 10px/15px Roboto;
   color: #fff;
   margin: 0 2px;
 }
@@ -1087,7 +1087,7 @@ select:active {
   width: 160px;
   background-color: #444;
   color: #fff;
-  font: bold 11px Ubuntu;
+  font: bold 11px Roboto;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
