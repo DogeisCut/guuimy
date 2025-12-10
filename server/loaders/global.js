@@ -22,10 +22,10 @@ global.travellingPlayers = [];
 global.fps = "Unknown";
 
 global.loadedAddons = [];
-global.TEAM_BLUE = -1;
-global.TEAM_GREEN = -2;
+global.TEAM_LIME = -1;
+global.TEAM_PURPLE = -2;
 global.TEAM_RED = -3;
-global.TEAM_PURPLE = -4;
+global.TEAM_BLUE = -4;
 global.TEAM_YELLOW = -5;
 global.TEAM_ORANGE = -6;
 global.TEAM_BROWN = -7;
@@ -43,7 +43,7 @@ global.teamNames = ["LIME", "PURPLE", "RED", "BLUE", "YELLOW", "ORANGE", "BROWN"
 global.teamColors = [1, 14, 12, 10, 25, 26, 27, 28];
 global.getTeamName = team => ["BLUE", "GREEN", "RED", "PURPLE", "YELLOW", "ORANGE", "BROWN", "CYAN", , "DREADNOUGHTS"][-team - 1] ?? "An unknown team";
 global.getTeamColor = (team, fixMode = false) => {
-    let color = ([10, 11, 12, 15, 25, 26, 27, 28, , 4][-team - 1] ?? 3);
+    let color = ([1, 14, 12, 10, 25, 26, 27, 28, , 4][-team - 1] ?? 3);
     if (fixMode) color = color + " 0 1 0 false";
     return color;
 }

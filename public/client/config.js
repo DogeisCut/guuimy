@@ -1,7 +1,7 @@
 const config = {
     graphical: {
         borderChunk: 8,
-        barChunk: 7,
+        barChunk: 4,
         mininumBorderChunk: 0.5,
         deathBlurAmount: 3,
         slowerFOV: true,

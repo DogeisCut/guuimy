@@ -25,8 +25,8 @@ var color = {
         "teal": "#1ff8a5",
 
         "guiwhite": "#ffffff",
-        "white": "#c9c9c9ff",
-        "grey": "#acacacff",
+        "white": "#c9c9c9",
+        "grey": "#acacac",
         "black": "#4f375a",
         "guiblack": "#111111",
 

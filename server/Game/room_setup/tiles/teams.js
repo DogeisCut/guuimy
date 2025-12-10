@@ -20,34 +20,34 @@ teamRoomCheck = (tile, team, room) => {
 
 // Team -1 (blue)
 tileClass.base1 = new Tile({
-    COLOR: "blue",
-    INIT: (tile, room) => teamRoomCheck(tile, TEAM_BLUE, room),
-    TICK: tile => teamCheck(tile, TEAM_BLUE)
+    COLOR: 1, //lgreen, for some reason the string doesnt work
+    INIT: (tile, room) => teamRoomCheck(tile, TEAM_LIME, room),
+    TICK: tile => teamCheck(tile, TEAM_LIME)
 })
 tileClass.baseprotected1 = new Tile({
-    COLOR: "blue",
+    COLOR: 1, //lgreen, for some reason the string doesnt work
     VISIBLE_FROM_BLACKOUT: true,
     INIT: (tile, room) => {
-        teamRoomCheck(tile, TEAM_BLUE, room),
-        spawnPermanentBaseProtector(tile.loc, TEAM_BLUE);
+        teamRoomCheck(tile, TEAM_LIME, room),
+        spawnPermanentBaseProtector(tile.loc, TEAM_LIME);
     },
-    TICK: tile => teamCheck(tile, TEAM_BLUE)
+    TICK: tile => teamCheck(tile, TEAM_LIME)
 })
 
 // Team -2 (Green)
 tileClass.base2 = new Tile({
-    COLOR: "green",
-    INIT: (tile, room) => teamRoomCheck(tile, TEAM_GREEN, room),
-    TICK: tile => teamCheck(tile, TEAM_GREEN)
+    COLOR: "purple",
+    INIT: (tile, room) => teamRoomCheck(tile, TEAM_PURPLE, room),
+    TICK: tile => teamCheck(tile, TEAM_PURPLE)
 })
 tileClass.baseprotected2 = new Tile({
-    COLOR: "green",
+    COLOR: "purple",
     VISIBLE_FROM_BLACKOUT: true,
     INIT: (tile, room) => {
-        teamRoomCheck(tile, TEAM_GREEN, room),
-        spawnPermanentBaseProtector(tile.loc, TEAM_GREEN);
+        teamRoomCheck(tile, TEAM_PURPLE, room),
+        spawnPermanentBaseProtector(tile.loc, TEAM_PURPLE);
     },
-    TICK: tile => teamCheck(tile, TEAM_GREEN)
+    TICK: tile => teamCheck(tile, TEAM_PURPLE)
 })
 
 // Team -3 (Red)
@@ -68,16 +68,16 @@ tileClass.baseprotected3 = new Tile({
 
 // Team -4 (Purple)
 tileClass.base4 = new Tile({
-    COLOR: "magenta",
-    INIT: (tile, room) => teamRoomCheck(tile, TEAM_PURPLE, room),
-    TICK: tile => teamCheck(tile, TEAM_PURPLE)
+    COLOR: "blue",
+    INIT: (tile, room) => teamRoomCheck(tile, TEAM_BLUE, room),
+    TICK: tile => teamCheck(tile, TEAM_BLUE)
 })
 tileClass.baseprotected4 = new Tile({
-    COLOR: "magenta",
+    COLOR: "blue",
     VISIBLE_FROM_BLACKOUT: true,
     INIT: (tile, room) => {
-        teamRoomCheck(tile, TEAM_PURPLE, room),
-        spawnPermanentBaseProtector(tile.loc, TEAM_PURPLE);
+        teamRoomCheck(tile, TEAM_BLUE, room),
+        spawnPermanentBaseProtector(tile.loc, TEAM_BLUE);
     },
-    TICK: tile => teamCheck(tile, TEAM_PURPLE)
+    TICK: tile => teamCheck(tile, TEAM_BLUE)
 })
