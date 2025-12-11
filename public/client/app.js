@@ -3036,7 +3036,7 @@ import * as socketStuff from "./socketinit.js";
             let height = len;
 
             // Animation processing
-            global.columnCount = Math.max(5, Math.floor(gui.upgrades.length ** 0.55));
+            global.columnCount = Math.max(4, Math.floor(gui.upgrades.length ** 0.55));
             if (!global.canUpgrade) {
                 upgradeMenu.force(global.screenWidth)
                 global.canUpgrade = true;
