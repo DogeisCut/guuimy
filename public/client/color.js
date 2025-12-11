@@ -1,28 +1,28 @@
 var color = {
     // Themes
     "normal": {
-        "blue": "#4683f5",
-        "green": "#66a85e",
-        "red": "#ee5457",
-        "magenta": "#eb7ee5",
-        "mustard": "#f0d122",
-        "tangerine": "#ec7b0f",
+        "blue": "#5c90f0ff",
+        "green": "#7dc475ff",
+        "red": "#dd7173ff",
+        "magenta": "#d48cd1ff",
+        "mustard": "#dbc751ff",
+        "tangerine": "#e29f61ff",
         "brown": "#ac854f",
-        "cyan": "#42dee9",
-        "yellow": "#ffdb0d",
+        "cyan": "#81d7ddff",
+        "yellow": "#f5dc52ff",
         "dgrey": "#929292",
 
         "vlgrey": "#e2e2e2",
-        "gold": "#f7c251",
-        "orange": "#e78544",
-        "purple": "#903ffa",
-        "aqua": "#7adbba",
-        "pink": "#ef99c3",
-        "lavender": "#b58efd",
+        "gold": "#e9c882ff",
+        "orange": "#e6a174ff",
+        "purple": "#9f74d6ff",
+        "aqua": "#a8e6d1ff",
+        "pink": "#e4b0c9ff",
+        "lavender": "#aba2f7ff",
         "lgrey": "#a4a4ad",
 
-        "lgreen": "#6aec37",
-        "teal": "#1ff8a5",
+        "lgreen": "#96e079ff",
+        "teal": "#94e7c7ff",
 
         "guiwhite": "#ffffff",
         "white": "#c9c9c9",
@@ -30,7 +30,7 @@ var color = {
         "black": "#4f375a",
         "guiblack": "#111111",
 
-        "border": 0.66
+        "border": 0.5
     }
 };
 export { color }

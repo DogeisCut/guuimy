@@ -720,21 +720,21 @@ import * as socketStuff from "./socketinit.js";
     }
 
     function loadSettings() {
-        config.graphical.fancyAnimations = document.getElementById("optFancy").checked;
-        config.graphical.predictAnimations = document.getElementById("optPredictAnim").checked;
-        config.graphical.lerpAnimations = document.getElementById("optLerpAnim").checked;
-        config.graphical.smoothcamera = document.getElementById("smoothCamera").checked;
-        config.graphical.pointy = document.getElementById("optPointy").checked;
-        config.game.autoLevelUp = document.getElementById("autoLevelUp").checked;
-        config.game.centeredMinimap = document.getElementById("optCenterMinimap").checked;
-        config.lag.unresponsive = document.getElementById("optPredictive").checked;
-        config.graphical.sharpEdges = document.getElementById("optSharpEdges").checked;
-        config.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
-        config.graphical.separatedHealthbars = document.getElementById("separatedHealthbars").checked;
-        config.graphical.lowResolution = document.getElementById("optLowResolution").checked;
-        config.graphical.showGrid = !document.getElementById("optNoGrid").checked;
-        config.graphical.slowerFOV = document.getElementById("optSlowerFOV").checked;
-        config.graphical.optimizeMode = document.getElementById("optOptimizeMode").checked;
+        config.graphical.fancyAnimations = true;
+        config.graphical.predictAnimations = false;
+        config.graphical.lerpAnimations = true;
+        config.graphical.smoothcamera = true;
+        config.graphical.pointy = false;
+        config.game.autoLevelUp = false; // [DOGEIS NOTE] gonna remove this for non devs anyways
+        config.game.centeredMinimap = false;
+        config.lag.unresponsive = false;
+        config.graphical.sharpEdges = false;
+        config.graphical.coloredHealthbars = true;
+        config.graphical.separatedHealthbars = true; // [DOGEIS NOTE] gonna remove shield anyways
+        config.graphical.lowResolution = false//document.getElementById("optLowResolution").checked;
+        config.graphical.showGrid = true
+        config.graphical.slowerFOV = true;
+        config.graphical.optimizeMode = false;
         // GUI
         global.GUIStatus.renderGUI = document.getElementById("optRenderGui").checked;
         global.GUIStatus.renderLeaderboard = document.getElementById("optRenderLeaderboard").checked;
@@ -743,7 +743,7 @@ import * as socketStuff from "./socketinit.js";
         global.GUIStatus.renderPlayerKillbar = document.getElementById("optRenderKillbar").checked;
         global.GUIStatus.renderhealth = document.getElementById("optRenderHealth").checked;
         global.GUIStatus.minimapReducedInfo = document.getElementById("optReducedInfo").checked;
-        global.GUIStatus.fullHDMode = document.getElementById("optFullHD").checked;
+        global.GUIStatus.fullHDMode = false;
         global.mobileStatus.enableCrosshair = document.getElementById("showCrosshair").checked;
         global.mobileStatus.showJoysticks = document.getElementById("showJoystick").checked;
         switch (document.getElementById("optBorders").value) {
@@ -2562,7 +2562,7 @@ import * as socketStuff from "./socketinit.js";
                 y += global.screenHeight / 2;
 
                 if (health < 0.99 || shield < 0.99 && global.GUIStatus.renderhealth) {
-                    let col = config.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.lgreen;
+                    let col = config.graphical.coloredHealthbars ? gameDraw.modifyColor(instance.color) : color.lgreen;
                     let yy = y + 1 + realSize + 15 * ratio;
                     let barWidth = 3 * ratio;
                     ctx[1].globalAlpha = alpha * alpha * fade;
@@ -2701,7 +2701,7 @@ import * as socketStuff from "./socketinit.js";
     }
 
     function drawSelfInfo(max) {
-        const mainColor = gui.color ? gameDraw.getColor(parseInt(gui.color.split(" ")[0])) : 0
+        const mainColor = gui.color ? gameDraw.modifyColor(gui.color) : 0
         //rendering information
         let width = 440,
             scorewidth = 70,
@@ -2883,7 +2883,7 @@ import * as socketStuff from "./socketinit.js";
         let ping = global.metrics.latency.reduce((b, a) => b + a, 1) / global.metrics.latency.length - 1;
         let xloc = global.player.renderx / 30;
         let yloc = global.player.rendery / 30;
-        let watermarkText = "titanclad.io";
+        let watermarkText = "guuimy.io";
         let length = Math.max(measureText(watermarkText, 32)) / 12;
         let watermarkTextPos1 = Math.round(x + len / 2) + 0.5;
         let watermarkColor = gameDraw.getColor({gradient: true, asset: [{color: `${color.lgreen}`}, {color: `${color.purple}`}]}, ctx[2], watermarkTextPos1 - length, length * 0.07, watermarkTextPos1 + length, 0);
