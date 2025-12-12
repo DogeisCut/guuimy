@@ -5,7 +5,7 @@ const g = require('../gunvals.js');
 const eggnoughtBody = {
 	SPEED: base.SPEED * 0.75,
 	HEALTH: base.HEALTH * 1.75,
-	SHIELD: base.SHIELD * 2.5,
+	
 	REGEN: base.REGEN * 1.25,
 	FOV: base.FOV,
 	RESIST: base.RESIST,
@@ -15,7 +15,7 @@ const eggnoughtBody = {
 const squarenoughtBody = {
 	SPEED: base.SPEED * 0.7,
 	HEALTH: base.HEALTH * 2.5,
-	SHIELD: base.SHIELD * 2.7,
+	
 	REGEN: base.REGEN * 1.4,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
@@ -25,7 +25,7 @@ const squarenoughtBody = {
 const trinoughtBody = {
 	SPEED: base.SPEED * 0.65,
 	HEALTH: base.HEALTH * 3.5,
-	SHIELD: base.SHIELD * 2.9,
+	
 	REGEN: base.REGEN * 1.5,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
@@ -35,7 +35,7 @@ const trinoughtBody = {
 const pentanoughtBody = {
 	SPEED: base.SPEED * 0.6,
 	HEALTH: base.HEALTH * 4.25,
-	SHIELD: base.SHIELD * 3.1,
+	
 	REGEN: base.REGEN * 1.55,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
@@ -45,7 +45,7 @@ const pentanoughtBody = {
 const hexnoughtBody = {
 	SPEED: base.SPEED * 0.55,
 	HEALTH: base.HEALTH * 5,
-	SHIELD: base.SHIELD * 3.3,
+	
 	REGEN: base.REGEN * 1.6,
 	FOV: base.FOV * 0.95,
 	RESIST: base.RESIST,
@@ -53,27 +53,27 @@ const hexnoughtBody = {
 	ACCELERATION: base.ACCEL * 0.4,
 };
 const hpBuffBodyStats = [
-	{ HEALTH: 1.4, SPEED: 1.25, SHIELD: 1.4,  REGEN: 1.3  },
-	{ HEALTH: 1.7, SPEED: 1.1,  SHIELD: 1.65, REGEN: 1.45 },
-	{ HEALTH: 1.8, SPEED: 1.17, SHIELD: 1.9,  REGEN: 1.6  },
-	{ HEALTH: 1.9, SPEED: 1.17, SHIELD: 2.15, REGEN: 1.7  },
+	{ HEALTH: 1.4, SPEED: 1.25,   REGEN: 1.3  },
+	{ HEALTH: 1.7, SPEED: 1.1,   REGEN: 1.45 },
+	{ HEALTH: 1.8, SPEED: 1.17,   REGEN: 1.6  },
+	{ HEALTH: 1.9, SPEED: 1.17,  REGEN: 1.7  },
 ];
 const speedBuffBodyStats = [
-	{ HEALTH: 0.85, SPEED: 1.4, SHIELD: 0.9,  REGEN: 1   },
-	{ HEALTH: 0.8,  SPEED: 1.5, SHIELD: 0.83, REGEN: 0.9 },
-	{ HEALTH: 0.75, SPEED: 1.6, SHIELD: 0.75, REGEN: 0.8 },
+	{ HEALTH: 0.85, SPEED: 1.4,   REGEN: 1   },
+	{ HEALTH: 0.8,  SPEED: 1.5,  REGEN: 0.9 },
+	{ HEALTH: 0.75, SPEED: 1.6,  REGEN: 0.8 },
 ];
 const healerBodyStats = [
-	{ HEALTH: 1.1,  SPEED: 1.04, SHIELD: 1.2,  REGEN: 1.15 },
-	{ HEALTH: 1,    SPEED: 0.98, SHIELD: 1.28, REGEN: 1.2  },
-	{ HEALTH: 0.92, SPEED: 0.94, SHIELD: 1.35, REGEN: 1.25 },
+	{ HEALTH: 1.1,  SPEED: 1.04,   REGEN: 1.15 },
+	{ HEALTH: 1,    SPEED: 0.98,  REGEN: 1.2  },
+	{ HEALTH: 0.92, SPEED: 0.94,  REGEN: 1.25 },
 ];
 
 function combineBodyStats(...bodies) {
 	let output = {
 		HEALTH: 1,
 		SPEED: 1,
-		SHIELD: 1,
+		
 		REGEN: 1,
 	}
 	for (let body of bodies) {
@@ -99,7 +99,7 @@ const hexnoughtScaleFactor = 0.9;
 // Misc
 Class.genericDreadnoughtOfficialV2 = {
 	PARENT: "genericTank",
-	SKILL_CAP: Array(10).fill(smshskl),
+	SKILL_CAP: Array(9).fill(smshskl),
 	REROOT_UPGRADE_TREE: ["dreadWeaponOfficialV2", "dreadBodyOfficialV2"],
 }
 Class.genericEggnought = {
@@ -2218,7 +2218,7 @@ function mergeHexnoughtWeaponV2(weapon1, weapon2) {
 	
 	// Body stat modification
 	// Arithmetic mean of body stats
-	let bodyStatFactors = {FOV: 2, SPEED: 2, HEALTH: 2, SHIELD: 2, REGEN: 2, RESIST: 2, DENSITY: 2};
+	let bodyStatFactors = {FOV: 2, SPEED: 2, HEALTH: 2,  REGEN: 2, RESIST: 2, DENSITY: 2};
 	let weapon1Body = weapon1.BODY ?? pentanoughtBody;
 	let weapon2Body = weapon2.BODY ?? pentanoughtBody;
 	for (let m in bodyStatFactors) {

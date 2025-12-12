@@ -160,8 +160,8 @@ Class.eliteSpawner = {
     UPGRADE_COLOR: "pink",
     MAX_CHILDREN: 9,
     AI: { STRAFE: false },
-    SKILL_CAP: Array(10).fill(15),
-    SKILL: [15, 8, 8, 8, 5, 1, 0, 9, 1, 0],
+    SKILL_CAP: Array(9).fill(15),
+    SKILL: [15, 8, 8, 8, 5, 1, 0, 9, 1],
     GUNS: [
         {
             POSITION: [11, 16, 1, 0, 0, 60, 0],
@@ -1094,7 +1094,7 @@ Class.nester = {
         FOV: 1.3,
         SPEED: base.SPEED * 0.25,
         HEALTH: base.HEALTH * 9,
-        SHIELD: base.SHIELD * 1.5,
+        
         REGEN: base.REGEN,
         DAMAGE: base.DAMAGE * 2.5,
     },
@@ -1190,7 +1190,7 @@ Class.arNester = {
         FOV: 1.3,
         SPEED: base.SPEED * 0.25,
         HEALTH: base.HEALTH * 18,
-        SHIELD: base.SHIELD * 1.5,
+        
         REGEN: base.REGEN,
         DAMAGE: base.DAMAGE * 3,
     },
@@ -1311,7 +1311,7 @@ Class.roguePalisade = {
         FOV: 1.4,
         SPEED: 0.05 * base.SPEED,
         HEALTH: 16 * base.HEALTH,
-        SHIELD: 3 * base.SHIELD,
+        
         DAMAGE: 3 * base.DAMAGE,
     },
     GUNS: weaponArray({
@@ -1346,7 +1346,7 @@ Class.rogueArmada = {
         FOV: 1.3,
         SPEED: base.SPEED * 0.1,
         HEALTH: base.HEALTH * 16,
-        SHIELD: base.SHIELD * 3,
+        
         REGEN: base.REGEN,
         DAMAGE: base.DAMAGE * 3,
     },
@@ -1430,7 +1430,7 @@ Class.rogueAlcazar = {
         FOV: 1.4,
         SPEED: 0.05 * base.SPEED,
         HEALTH: 32 * base.HEALTH,
-        SHIELD: 3 * base.SHIELD,
+        
         DAMAGE: 3.5 * base.DAMAGE,
     },
     GUNS: weaponArray({
@@ -1563,7 +1563,7 @@ Class.terrestrial = {
     BODY: {
         FOV: 1,
         HEALTH: 1000,
-        SHIELD: 50,
+        
         REGEN: base.REGEN * 0.3,
         SPEED: base.SPEED * 0.7,
         DAMAGE: 9,
@@ -1580,7 +1580,7 @@ Class.celestial = {
     BODY: {
         FOV: 1,
         HEALTH: 1500,
-        SHIELD: 75,
+        
         REGEN: base.REGEN * 0.3,
         SPEED: base.SPEED * 0.5,
         DAMAGE: 12,
@@ -1602,7 +1602,7 @@ Class.eternal = {
     BODY: {
         FOV: 1,
         HEALTH: 3000,
-        SHIELD: 150,
+        
         REGEN: base.REGEN * 0.1,
         SPEED: base.SPEED * 0.15,
         DAMAGE: 18,
@@ -2397,7 +2397,6 @@ Class.tgsBoss = {
         spd: 1,
         atk: 1,
         hlt: 1,
-        shi: 1,
         rgn: 1,
         mob: 1,
     }),
@@ -3138,7 +3137,7 @@ Class.theDeveloperShape = {
         SPEED: 0,
         HEALTH: base.HEALTH * 25000000000,
         DAMAGE: base.DAMAGE * 10,
-        SHIELD: base.SHIELD * 50000,
+        
         REGEN: base.REGEN * 2500000,
         FOV: base.FOV * 5,
         SIZE: 1,
@@ -3389,7 +3388,7 @@ Class.frostBoss = {
     BODY: {
         SPEED: base.SPEED * 0.6,
         HEALTH: base.HEALTH * 11,
-        SHIELD: base.SHIELD * 7,
+        
         REGEN: base.REGEN * 2.5,
         FOV: base.FOV * 1.4,
         RESIST: base.RESIST * 1.2,
@@ -3523,7 +3522,7 @@ Class.toothlessBase = {
     VALUE: 30e3,
     SIZE: 24,
     COLOR: "purple",
-    SKILL_CAP: Array(10).fill(smshskl + 3),
+    SKILL_CAP: Array(9).fill(smshskl + 3),
     defineLevelSkillPoints: (level) => {
         if (level < 2) return 0;
         if (level <= 40) return 1;
@@ -3877,7 +3876,7 @@ Class.AEMKShipBoss = {
     BODY: {
         REGEN: 0.4,
         FOV: 1,
-        SHIELD: 2,
+        
         ACCEL: 0.2,
         SPEED: 0.6,
         HEALTH: 5000,
@@ -3964,7 +3963,7 @@ Class.helenaBossBase = {
         HEALTH: 2048,
         DAMAGE: 16,
         REGEN: 2 * base.REGEN,
-        SHIELD: 4 * base.SHIELD,
+        
         SPEED: 0.32 * base.SPEED,
         FOV: 0.96
     },

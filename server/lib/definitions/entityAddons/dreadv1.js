@@ -5,7 +5,7 @@ const dreadnoughtBody = {
     SPEED: base.SPEED * 0.6,
     HEALTH: base.HEALTH * 4,
     DAMAGE: base.DAMAGE * 2.5,
-    SHIELD: base.SHIELD * 2.5,
+    
     FOV: base.FOV * 1.25,
     DENSITY: base.DENSITY * 6,
 	REGEN: base.REGEN,
@@ -69,7 +69,7 @@ Class.hexagonOfficialV1 = {
         HEALTH: 600 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
         PENETRATION: 1.1,
-        SHIELD: 40 * basePolygonHealth,
+        
         ACCELERATION: 0.0025
     },
 	VALUE: 21000,
@@ -88,7 +88,7 @@ Class.heptagonOfficialV1 = {
         HEALTH: 750 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
         PENETRATION: 1.1,
-        SHIELD: 50 * basePolygonHealth,
+        
         ACCELERATION: 0.0025
     },
 	VALUE: 28000,
@@ -107,7 +107,7 @@ Class.octagonOfficialV1 = {
         HEALTH: 900 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
         PENETRATION: 1.1,
-        SHIELD: 60 * basePolygonHealth,
+        
         ACCELERATION: 0.0025
     },
 	VALUE: 35000,
@@ -126,7 +126,7 @@ Class.nonagonOfficialV1 = {
         HEALTH: 1050 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
         PENETRATION: 1.1,
-        SHIELD: 70 * basePolygonHealth,
+        
         ACCELERATION: 0.0025
     },
 	VALUE: 42000,
@@ -179,7 +179,7 @@ Class.portalOfficialV1 = {
 	TYPE: 'portal',
 	BODY: {
 		HEALTH: 1e10,
-		SHIELD: 1e10,
+		
 		REGEN: 1e10,
 		DAMAGE: 0,
 		PENETRATION: 1e10,
@@ -259,7 +259,7 @@ Class.genericDreadnought1 = {
 	SHAPE: 6,
 	COLOR: 'hexagon',
 	SIZE: 22.5,
-	SKILL_CAP: Array(10).fill(smshskl+3),
+	SKILL_CAP: Array(9).fill(smshskl+3),
 	REROOT_UPGRADE_TREE: "dreadOfficialV1",
 }
 // Turret damage modifiers:
@@ -418,7 +418,7 @@ Class.juggernautOfficialV1 = {
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: {
 		HEALTH: 1.7,
-		SHIELD: 2.2,
+		
 		REGEN: 1.5,
 		SPEED: 1.1,
 	},
@@ -693,7 +693,7 @@ Class.behemothOfficialV1 = {
 	UPGRADE_TOOLTIP: "Health Buff",
 	BODY: {
 		HEALTH: 2.3,
-		SHIELD: 2.8,
+		
 		REGEN: 1.7,
 		SPEED: 1.15,
 	},

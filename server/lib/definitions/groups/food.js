@@ -138,7 +138,7 @@ Class.betaPentagon = {
         HEALTH: 75 * basePolygonHealth,
         RESIST: Math.pow(1.25, 2),
         PENETRATION: 1.1,
-        SHIELD: 20 * basePolygonHealth,
+        
         ACCELERATION: 0.003
     },
     DRAW_HEALTH: true,
@@ -160,7 +160,7 @@ Class.alphaPentagon = {
         HEALTH: 562.5 * basePolygonHealth,
         RESIST: Math.pow(1.25, 3),
         PENETRATION: 1.1,
-        SHIELD: 40 * basePolygonHealth,
+        
         ACCELERATION: 0.0025
     },
     DRAW_HEALTH: true,
@@ -181,7 +181,7 @@ Class.hexagon = {
         DENSITY: 8,
         HEALTH: 20 * basePolygonHealth,
         RESIST: 1.3,
-        SHIELD: 50 * basePolygonHealth,
+        
         PENETRATION: 1.1,
         ACCELERATION: 0.003
     },

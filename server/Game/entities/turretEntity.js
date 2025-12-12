@@ -166,7 +166,7 @@ class turretEntity extends EventEmitter {
             }
         };
         if (set.SKILL_CAP != null && set.SKILL_CAP != []) {
-            if (set.SKILL_CAP.length != 10) throw "Inappropiate skill cap amount.";
+            if (set.SKILL_CAP.length != 9) throw "Inappropiate skill cap amount.";
             this.skill.setCaps(set.SKILL_CAP);
         }
         if ("function" === typeof set.defineLevelSkillPoints) this.skill.LSPF = set.defineLevelSkillPoints;
@@ -212,7 +212,6 @@ class turretEntity extends EventEmitter {
             if (set.BODY.SPEED != null) this.SPEED = set.BODY.SPEED;
             if (set.BODY.HEALTH != null) this.HEALTH = set.BODY.HEALTH;
             if (set.BODY.RESIST != null) this.RESIST = set.BODY.RESIST;
-            if (set.BODY.SHIELD != null) this.SHIELD = set.BODY.SHIELD;
             if (set.BODY.REGEN != null) this.REGEN = set.BODY.REGEN;
             if (set.BODY.DAMAGE != null) this.DAMAGE = set.BODY.DAMAGE;
             if (set.BODY.PENETRATION != null) this.PENETRATION = set.BODY.PENETRATION;

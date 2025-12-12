@@ -4,11 +4,10 @@ const skcnv = {
     str: 2,
     dam: 3,
     spd: 4,
-    shi: 5,
-    atk: 6,
-    hlt: 7,
-    rgn: 8,
-    mob: 9,
+    atk: 5,
+    hlt: 6,
+    rgn: 7,
+    mob: 8,
 };
 
 let curvePoints = [];
@@ -24,21 +23,20 @@ function apply(f, x) {
 }
 
 class Skill {
-    constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    constructor(inital = [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
         // Just skill stuff.
         this.raw = inital;
         this.caps = [];
-        this.setCaps([ Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap ]);
+        this.setCaps([ Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap, Config.skill_cap ]);
         this.name = [
             "Reload",
             "Bullet Penetration",
             "Bullet Health",
             "Bullet Damage",
             "Bullet Speed",
-            "Shield Capacity",
             "Body Damage",
             "Max Health",
-            "Shield Regeneration",
+            "Health Regeneration",
             "Movement Speed",
         ];
         this.atk = 0;
@@ -50,7 +48,6 @@ class Skill {
         this.rld = 0;
         this.mob = 0;
         this.rgn = 0;
-        this.shi = 0;
         this.rst = 0;
         this.brst = 0;
         this.ghost = 0;
@@ -64,7 +61,7 @@ class Skill {
         this.level = 0;
         this.levelUpScore = 1;
         if (resetLSPF) this.LSPF = null;
-        this.set([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        this.set([0, 0, 0, 0, 0, 0, 0, 0, 0]);
         this.maintain();
     }
     update() {
@@ -86,7 +83,6 @@ class Skill {
         this.acl = apply(0.5, attrib[skcnv.rld]);
         this.rst = 0.5 * attrib[skcnv.str] + 2.5 * attrib[skcnv.pen];
         this.ghost = attrib[skcnv.pen];
-        this.shi = Config.glass_health_factor * apply(3 / Config.glass_health_factor - 1, attrib[skcnv.shi]);
         this.atk = apply(0.021, attrib[skcnv.atk]);
         this.hlt = Config.glass_health_factor * apply(2 / Config.glass_health_factor - 1, attrib[skcnv.hlt]);
         this.mob = apply(0.8, attrib[skcnv.mob]);
@@ -103,7 +99,6 @@ class Skill {
         this.raw[6] = thing[6];
         this.raw[7] = thing[7];
         this.raw[8] = thing[8];
-        this.raw[9] = thing[9];
         this.update();
     }
     setCaps(thing) {
@@ -116,7 +111,6 @@ class Skill {
         this.caps[6] = thing[6];
         this.caps[7] = thing[7];
         this.caps[8] = thing[8];
-        this.caps[9] = thing[9];
         this.update();
     }
     maintain() {

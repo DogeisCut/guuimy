@@ -451,7 +451,7 @@ class socketManager {
                 }
                 let number = m[0],
                     max = m[1],
-                    stat = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi"][number];
+                    stat = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn" ][number];
     
                 if (typeof number != "number") {
                     socket.kick("Weird stat upgrade request number.");
@@ -790,7 +790,7 @@ class socketManager {
         let vars = [],
             skills = player.body.skill,
             out = [],
-            statnames = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi"];
+            statnames = ["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn"];
         // Load everything (b/c I'm too lazy to do it manually)
         for (let i = 0; i < statnames.length; i++) {
             vars.push(this.floppy());
@@ -847,7 +847,6 @@ class socketManager {
     getstuff(s) {
         let val = '';
         //these have to be in reverse order
-        val += s.amount("shi").toString(16).padStart(2, '0');
         val += s.amount("rgn").toString(16).padStart(2, '0');
         val += s.amount("mob").toString(16).padStart(2, '0');
         val += s.amount("rld").toString(16).padStart(2, '0');
@@ -1288,8 +1287,7 @@ class socketManager {
                 /* 11 */ data.layer,
                 /* 12 */ data.color,
                 /* 14 */ Math.ceil(65535 * data.health),
-                /* 15 */ Math.round(65535 * data.shield),
-                /* 16 */ Math.round(255 * data.alpha)
+                /* 15 */ Math.round(255 * data.alpha)
             );
         } else {
             output.push(
@@ -1309,13 +1307,12 @@ class socketManager {
                 /* 15 */ data.drawFill,
                 /* 16 */ data.invuln,
                 /* 17 */ Math.ceil(65535 * data.health),
-                /* 18 */ Math.round(65535 * data.shield),
-                /* 19 */ Math.round(255 * data.alpha)
+                /* 18 */ Math.round(255 * data.alpha)
             );
             if (data.type & 0x04) {
                 output.push(
-                    /* 17 */ data.name,
-                    /* 18 */ data.score
+                    /* 16 */ data.name,
+                    /* 17 */ data.score
                 );
             }
         };
@@ -1351,13 +1348,13 @@ class socketManager {
                 }
                 // Also let us see for our body.
                 let alpha = this.getInvisEntityAlpha(player, e);
-                if (!e.limited && !player.body.settings.canSeeInvisible) data[18] = Math.round(255 * alpha);
+                if (!e.limited && !player.body.settings.canSeeInvisible) data[17] = Math.round(255 * alpha);
             }
             if (player.body.settings.canSeeInvisible) {
                 data = data.slice();
                 let alpha = this.getInvisEntityAlpha(player, e);
-                if (e.limited) data[14] = Math.round(255 * alpha);
-                else data[18] = Math.round(255 * alpha);
+                if (e.limited) data[13] = Math.round(255 * alpha);
+                else data[17] = Math.round(255 * alpha);
             }
             if (
                 player.body.team === e.source.team &&

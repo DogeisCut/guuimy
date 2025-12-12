@@ -485,7 +485,7 @@ class gameServer {
                         CHASE: true,
                     },
                     CONTROLLERS: [["nearestDifferentMaster", { lockThroughWalls: true }], "mapTargetToGoal"],
-                    SKILL: Array(10).fill(9),
+                    SKILL: Array(9).fill(9),
                     ACCEPTS_SCORE: false,
                     CAN_BE_ON_LEADERBOARD: false,
                     VALUE: 100000,

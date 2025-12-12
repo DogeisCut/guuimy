@@ -265,8 +265,7 @@ class Canvas {
                 let skill = [
                     global.KEY_UPGRADE_ATK, global.KEY_UPGRADE_HTL, global.KEY_UPGRADE_SPD,
                     global.KEY_UPGRADE_STR, global.KEY_UPGRADE_PEN, global.KEY_UPGRADE_DAM,
-                    global.KEY_UPGRADE_RLD, global.KEY_UPGRADE_MOB, global.KEY_UPGRADE_RGN,
-                    global.KEY_UPGRADE_SHI
+                    global.KEY_UPGRADE_RLD, global.KEY_UPGRADE_MOB, global.KEY_UPGRADE_RGN
                 ].indexOf(event.keyCode);
                 if (skill >= 0) this.socket.talk('x', skill, 1 * global.statMaxing);
             }

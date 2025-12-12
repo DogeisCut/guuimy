@@ -17,8 +17,7 @@ module.exports = {
 			BULLET_DAMAGE: 'Bullet Damage',
 			RELOAD: 'Reload',
 			MOVE_SPEED: 'Movement Speed',
-			SHIELD_REGEN: 'Shield Regeneration',
-			SHIELD_CAP: 'Shield Capacity',
+			REGEN: 'Health Regeneration',
 		},
 		mixed: {
 			BULLET_SPEED: 'Weapon Speed',
@@ -83,7 +82,6 @@ module.exports = {
 	    DAMAGE: 3,
 	    RESIST: 1,
 	    PENETRATION: 1.05,
-	    SHIELD: 5.75,
 	    REGEN: 0.01,
 	    FOV: 1.02,
 	    DENSITY: 0.5,

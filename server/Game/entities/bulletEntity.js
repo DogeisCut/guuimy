@@ -33,7 +33,6 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
         this.guns = [];
         this.skill = new Skill();
         this.health = new HealthType(1, 'static', 0);
-        this.shield = new HealthType(0, 'dynamic');
         this.x = position.x;
         this.y = position.y;
         this.settings = {};
@@ -264,11 +263,17 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
             this.refreshBodyAttributes();
         }
         if (set.SKILL_CAP != null && set.SKILL_CAP != []) {
-            if (set.SKILL_CAP.length != 10) throw "Inappropiate skill cap amount.";
+            if (set.SKILL_CAP.length >= 9) {
+                set.SKILL_CAP = set.SKILL_CAP.splice(0,9)
+            }
+            if (set.SKILL_CAP.length != 9) throw "Inappropiate skill cap amount.";
             this.skill.setCaps(set.SKILL_CAP);
         }
         if (set.SKILL != null && set.SKILL != []) {
-            if (set.SKILL.length != 10) throw "Inappropiate skill raws.";
+            if (set.SKILL.length >= 9) {
+                set.SKILL = set.SKILL.splice(0,9)
+            }
+            if (set.SKILL.length != 9) throw "Inappropiate skill raws.";
             this.skill.set(set.SKILL);
         }
         if (set.VALUE != null) this.skill.score = Math.max(this.skill.score, set.VALUE * this.squiggle);
@@ -289,7 +294,6 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
             if (set.BODY.SPEED != null) this.SPEED = set.BODY.SPEED;
             if (set.BODY.HEALTH != null) this.HEALTH = set.BODY.HEALTH;
             if (set.BODY.RESIST != null) this.RESIST = set.BODY.RESIST;
-            if (set.BODY.SHIELD != null) this.SHIELD = set.BODY.SHIELD;
             if (set.BODY.REGEN != null) this.REGEN = set.BODY.REGEN;
             if (set.BODY.DAMAGE != null) this.DAMAGE = set.BODY.DAMAGE;
             if (set.BODY.PENETRATION != null) this.PENETRATION = set.BODY.PENETRATION;
@@ -333,9 +337,8 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
         if (this.settings.reloadToAcceleration) this.acceleration *= this.skill.acl;
         this.topSpeed = (1 * global.gameManager.runSpeed * this.SPEED * this.skill.mob) / speedReduce;
         if (this.settings.reloadToAcceleration) this.topSpeed /= Math.sqrt(this.skill.acl);
-        this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt * 1);
+        this.health.set(((this.settings.healthWithLevel ? 2 * this.level : 0) + this.HEALTH) * this.skill.hlt * 1, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * 1));
         this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
-        this.shield.set(((this.settings.healthWithLevel ? 0.6 * this.level : 0) + this.SHIELD) * this.skill.shi, Math.max(0, ((this.settings.healthWithLevel ? 0.006 * this.level : 0) + 1) * this.REGEN * this.skill.rgn * 1));
         this.damage = 1 * this.DAMAGE * this.skill.atk;
         this.penetration = 1 * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
         if (this.settings.diesAtRange || !this.range) this.range = 1 * this.RANGE;
@@ -371,7 +374,6 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
             size: this.size,
             realSize: this.realSize,
             health: this.health.display(),
-            shield: 0,
             alpha: this.alpha,
             facing: this.facing,
             vfacing: this.vfacing,
@@ -460,14 +462,6 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
             if (this.range < 0) this.kill();
         }
         if (this.settings.diesAtLowSpeed && !this.collisionArray.length && this.velocity.length < this.topSpeed / 2) this.health.amount -= this.health.getDamage(1 / global.gameManager.roomSpeed);
-        // Shield regen and damage
-        if (this.shield.max) {
-            if (this.damageReceived) {
-                let shieldDamage = this.shield.getDamage(this.damageReceived);
-                this.damageReceived -= shieldDamage;
-                this.shield.amount -= shieldDamage;
-            }
-        }
         // Health damage
         if (this.damageReceived) {
             let healthDamage = this.health.getDamage(this.damageReceived);

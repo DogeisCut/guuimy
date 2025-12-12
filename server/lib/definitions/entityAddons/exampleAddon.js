@@ -47,7 +47,7 @@ while (next.length && limit--) {
 Class.abomination = {
 	PARENT: "genericTank",
 	LABEL: "The Abomination",
-	SKILL_CAP: Array(10).fill(15),
+	SKILL_CAP: Array(9).fill(15),
 	SIZE: 15,
 	BODY: {
 		ACCELERATION: base.ACCEL * 0.2,
@@ -55,7 +55,7 @@ Class.abomination = {
 		HEALTH: base.HEALTH * 5,
 		DAMAGE: base.DAMAGE * 5,
 		PENETRATION: base.PENETRATION * 5,
-		SHIELD: base.SHIELD * 5,
+		
 		REGEN: base.REGEN * 5,
 		FOV: base.FOV * 2,
 		DENSITY: base.DENSITY * 5,

@@ -582,7 +582,7 @@ Class.minion = {
         SPEED: 1.8,
         ACCELERATION: 1,
         HEALTH: 5,
-        SHIELD: 0,
+        
         DAMAGE: 1.2,
         RESIST: 1,
         PENETRATION: 1,
@@ -652,7 +652,7 @@ Class.megaMinion = {
         SPEED: 3,
         ACCELERATION: 0.7,
         HEALTH: 5,
-        SHIELD: 0,
+        
         DAMAGE: 1.2,
         RESIST: 1,
         PENETRATION: 1,

@@ -29,12 +29,10 @@ gui = {
                 data?.bullet_damage ?? 'Bullet Damage',
                 data?.reload ?? 'Reload',
                 data?.move_speed ?? 'Movement Speed',
-                data?.shield_regen ?? 'Shield Regeneration',
-                data?.shield_cap ?? 'Shield Capacity',
+                data?.regen ?? 'Health Regeneration',
             ]
         },
     skills: [
-        { amount: 0, color: 'purple', cap: 1, softcap: 1 },
         { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
         { amount: 0, color: 'blue'  , cap: 1, softcap: 1 },
         { amount: 0, color: 'lgreen', cap: 1, softcap: 1 },
@@ -512,14 +510,11 @@ const process = (z = {}) => {
         // Update health, flagging as injured if needed
         if (isNew) {
             z.health = get.next() / 65535;
-            z.shield = get.next() / 65535;
         } else {
-            let hh = z.health,
-                ss = z.shield;
+            let hh = z.health;
             z.health = get.next() / 65535;
-            z.shield = get.next() / 65535;
             // Update stuff
-            if (z.health < hh || z.shield < ss) {
+            if (z.health < hh) {
                 z.render.status.set('injured');
             } else if (z.render.status.getFade() !== 1) {
                 // If it turns out that we thought it was dead and it wasn't
@@ -549,13 +544,11 @@ const process = (z = {}) => {
                 lastf: z.facing,
                 f: z.facing,
                 h: z.health,
-                s: z.shield,
                 interval: global.metrics.rendergap,
                 slip: 0,
                 status: Status(),
                 size: new util.animBar(),
                 health: util.AdvancedSmoothBar(z.health, 0.06, 1),
-                shield: util.AdvancedSmoothBar(z.shield, 0.06, 1),
                 xAnim: new util.animBar(),
                 yAnim: new util.animBar(),
                 faceAnim: new util.animBar(!0),
@@ -568,7 +561,6 @@ const process = (z = {}) => {
         }
         // Update the rendering healthbars and size
         z.render.health.set(z.health);
-        z.render.shield.set(z.shield);
         z.render.size.add(z.size);
         z.render.xAnim.add(z.x);
         z.render.yAnim.add(z.y);
@@ -700,7 +692,7 @@ const convert = {
             }
         }
         if (indices.statsdata) {
-            for (let i = 9; i >= 0; i--) {
+            for (let i = 8; i >= 0; i--) {
                 gui.skills[i].name = get.next();
                 gui.skills[i].cap = get.next();
                 gui.skills[i].softcap = get.next();
@@ -717,7 +709,6 @@ const convert = {
             gui.skills[6].amount = parseInt(skk.slice(12, 14), 16);
             gui.skills[7].amount = parseInt(skk.slice(14, 16), 16);
             gui.skills[8].amount = parseInt(skk.slice(16, 18), 16);
-            gui.skills[9].amount = parseInt(skk.slice(18, 20), 16);
         }
         if (indices.accel) {
             gui.accel = get.next();

@@ -58,7 +58,7 @@ Class.genericEntity = {
     UPGRADES_TIER_9: [],
     SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     LEVEL: 0,
-    SKILL_CAP: Array(10).fill(dfltskl),
+    SKILL_CAP: Array(9).fill(dfltskl),
     GUNS: [],
     MAX_CHILDREN: 0,
     BORDERLESS: false,
@@ -71,7 +71,7 @@ Class.genericEntity = {
         SPEED: 0,
         HEALTH: 1,
         RESIST: 1,
-        SHIELD: 0,
+        
         REGEN: 0,
         DAMAGE: 1,
         PENETRATION: 1,
@@ -112,7 +112,7 @@ Class.genericTank = {
         HEALTH: base.HEALTH,
         DAMAGE: base.DAMAGE,
         PENETRATION: base.PENETRATION,
-        SHIELD: base.SHIELD,
+        
         REGEN: base.REGEN,
         FOV: base.FOV,
         DENSITY: base.DENSITY,
@@ -145,10 +145,10 @@ Class.genericSmasher = {
         BULLET_HEALTH: 0,
         BULLET_DAMAGE: 0,
         BULLET_SPEED: 0,
-        SHIELD_CAPACITY: smshskl,
+        
         BODY_DAMAGE: smshskl,
         MAX_HEALTH: smshskl,
-        SHIELD_REGENERATION: smshskl,
+        
         MOVEMENT_SPEED: smshskl
     },
     STAT_NAMES: statnames.smasher,
@@ -169,7 +169,6 @@ Class.genericBoss = {
         spd: 0.2,
         atk: 0.3,
         hlt: 1,
-        shi: 0.7,
         rgn: 0.7,
         mob: 0,
     }),
@@ -370,7 +369,7 @@ Class.auraBase = {
     CAN_GO_OUTSIDE_ROOM: true,
     CONTROLLERS: ["disableOnOverride", "scaleWithMaster"],
     BODY: {
-        SHIELD: 1e9,
+        
         REGEN: 1e6,
         HEALTH: 1e9,
         DENSITY: 0,

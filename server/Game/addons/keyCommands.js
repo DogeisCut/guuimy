@@ -483,14 +483,12 @@ function init() {
                 selectedEntities(player, (o) => {
                     if (o.bond) return;
                     o.health.amount = o.health.max;
-                    o.shield.amount = o.shield.max;
                     healed++;
                 });
                 if (healed) {
                     socket.talk("m", 5_000, `Healed ${healed} entit${healed === 1 ? "y" : "ies"}!`);
                 } else {
                     player.body.health.amount = player.body.health.max;
-                    player.body.shield.amount = player.body.shield.max;
                     socket.talk("m", 4_000, "You are now fully healed.");
                 }
             }
@@ -501,7 +499,7 @@ function init() {
             level: 1,
             operatorAccess: true,
             run: ({ player, socket }) => {
-                let skills = Array(10).fill(15);
+                let skills = Array(9).fill(15);
                 player.body.skill.setCaps(skills);
                 player.body.skill.set(skills);
                 player.body.FOV = 2;
@@ -546,7 +544,7 @@ function init() {
                 player.body.define({ RESET_UPGRADES: true });
                 player.body.define("undercoverCop");
                 player.body.name = "TEAM POLICE";
-                let skills = Array(10).fill(15);
+                let skills = Array(9).fill(15);
                 player.body.skill.setCaps(skills);
                 player.body.skill.set(skills);
                 player.body.FOV = 2;

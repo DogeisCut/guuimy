@@ -28,7 +28,7 @@ const missingno = {
             y: -3.0944900009099996e-7
         }
     },
-    statnames: { body_damage: "???", max_health: "???", max_health: "???", bullet_speed: "???", bullet_health: "???", bullet_pen: "???", bullet_damage: "???", reload: "???", move_speed: "???", shield_regen: "???", shield_cap: "???" },
+    statnames: { body_damage: "???", max_health: "???", max_health: "???", bullet_speed: "???", bullet_health: "???", bullet_pen: "???", bullet_damage: "???", reload: "???", move_speed: "???", regen: "???" },
     rerootUpgradeTree: "basic", // todo: find a way to make this automatically change to Config.spawn_class without bricking everything
     className: "missingno",
     upgrades: [],
@@ -138,7 +138,6 @@ const global = {
     KEY_UPGRADE_RLD: 55,// 7
     KEY_UPGRADE_MOB: 56,// 8
     KEY_UPGRADE_RGN: 57,// 9
-    KEY_UPGRADE_SHI: 48,// 0
     KEY_MOUSE_0: 32,// 32
     KEY_MOUSE_1: 86,// V
     KEY_MOUSE_2: 16,// ShiftLeft

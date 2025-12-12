@@ -352,13 +352,10 @@ class gameHandler {
         }
     }
 
-    regenHealthAndShield() {
+    regenHealth() {
         for (let instance of entities.values()) {
-            if (instance.shield.max) {
-                instance.shield.regenerate();
-            }
             if (instance.health.amount) {
-                instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
+                instance.health.regenerate();
             }
         }
     };
@@ -408,7 +405,7 @@ class gameHandler {
         for (let i = 0; i < this.bots.length; i++) {
             let o = this.bots[i];
             o.skill.maintain();
-            o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(...Config.bot_skill_upgrade_chances)]);
+            o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn" ][ran.chooseChance(...Config.bot_skill_upgrade_chances)]);
             o.refreshSkills();
             if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) {
                 o.leftoverUpgrades--;
@@ -527,7 +524,7 @@ class gameHandler {
         }, 200)
         let healingLoop = setInterval(() => {
             if (!this.active) return clearInterval(healingLoop);
-            this.regenHealthAndShield();
+            this.regenHealth();
         }, Config.regenerate_tick);
     }
     stop() {

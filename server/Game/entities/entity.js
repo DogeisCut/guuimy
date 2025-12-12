@@ -46,7 +46,6 @@ class Entity extends EventEmitter {
         // Objects
         this.skill = new Skill();
         this.health = new HealthType(1, 'static', 0);
-        this.shield = new HealthType(0, 'dynamic');
         this.guns = new Map();
         this.gunsArrayed = [];
         this.turrets = new Map();
@@ -313,8 +312,7 @@ class Entity extends EventEmitter {
             bullet_damage: set.STAT_NAMES?.BULLET_DAMAGE ?? 'Bullet Damage',
             reload: set.STAT_NAMES?.RELOAD ?? 'Reload',
             move_speed: set.STAT_NAMES?.MOVE_SPEED ?? 'Movement Speed',
-            shield_regen: set.STAT_NAMES?.SHIELD_REGEN ?? 'Shield Regeneration',
-            shield_cap: set.STAT_NAMES?.SHIELD_CAP ?? 'Shield Capacity',
+            regen: set.STAT_NAMES?.REGEN ?? 'Health Regeneration',
         };
         if (set.AI != null) this.aiSettings = set.AI;
         if (set.INVISIBLE != null) this.invisible = set.INVISIBLE;
@@ -344,7 +342,7 @@ class Entity extends EventEmitter {
         }
         if (set.RESET_UPGRADES || set.RESET_STATS) {
             let caps = this.skill.caps.map(x => x);
-            this.skill.setCaps(Array(10).fill(0));
+            this.skill.setCaps(Array(9).fill(0));
             this.skill.setCaps(caps);
             this.upgrades = [];
             this.isArenaCloser = false;
@@ -403,18 +401,19 @@ class Entity extends EventEmitter {
             "BULLET_HEALTH",
             "BULLET_DAMAGE",
             "BULLET_SPEED",
-            "SHIELD_CAPACITY",
             "BODY_DAMAGE",
             "MAX_HEALTH",
-            "SHIELD_REGENERATION",
+            "HEALTH_REGENERATION",
             "MOVEMENT_SPEED"
         ];
         if (set.SKILL_CAP != null) {
             let skillCapsToSet = Array.isArray(set.SKILL_CAP) ? set.SKILL_CAP : SKILL_ORDER.map(name => 
                 set.SKILL_CAP[name] !== undefined ? set.SKILL_CAP[name] : 9 // Default max skill points to 9, cant decide if it should be 9 or 0
             );
-
-            if (skillCapsToSet.length !== 10) {
+            if (skillCapsToSet.length > 9) {
+                skillCapsToSet = skillCapsToSet.slice(0,9)
+            }
+            if (skillCapsToSet.length !== 9) {
                 throw "Inappropriate skill cap amount.";
             }
             this.skill.setCaps(skillCapsToSet);
@@ -424,8 +423,10 @@ class Entity extends EventEmitter {
             let skillsToSet = Array.isArray(set.SKILL) ? set.SKILL : SKILL_ORDER.map(name => 
                 set.SKILL[name] !== undefined ? set.SKILL[name] : 0 // Default current skill points to 0, cant decide if it should be 9 or 0
             );
-
-            if (skillsToSet.length !== 10) {
+            if (skillsToSet.length > 9) {
+                skillsToSet = skillsToSet.slice(0,9)
+            }
+            if (skillsToSet.length !== 9) {
                 throw "Inappropriate skill raws.";
             }
             this.skill.set(skillsToSet);
@@ -461,7 +462,6 @@ class Entity extends EventEmitter {
             if (set.BODY.SPEED != null) this.SPEED = set.BODY.SPEED;
             if (set.BODY.HEALTH != null) this.HEALTH = set.BODY.HEALTH;
             if (set.BODY.RESIST != null) this.RESIST = set.BODY.RESIST;
-            if (set.BODY.SHIELD != null) this.SHIELD = set.BODY.SHIELD;
             if (set.BODY.REGEN != null) this.REGEN = set.BODY.REGEN;
             if (set.BODY.DAMAGE != null) this.DAMAGE = set.BODY.DAMAGE;
             if (set.BODY.PENETRATION != null) this.PENETRATION = set.BODY.PENETRATION;
@@ -585,12 +585,7 @@ class Entity extends EventEmitter {
         this.health.set(
             ((this.settings.healthWithLevel ? 2 * level : 0) + this.HEALTH) *
                 this.skill.hlt *
-                1
-        );
-        this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
-        this.shield.set(
-            ((this.settings.healthWithLevel ? 0.6 * level : 0) + this.SHIELD) *
-                this.skill.shi,
+                1,
             Math.max(
                 0,
                 ((this.settings.healthWithLevel ? 0.006 * level : 0) + 1) *
@@ -599,6 +594,7 @@ class Entity extends EventEmitter {
                     1
             )
         );
+        this.health.resist = 1 - 1 / Math.max(1, this.RESIST + this.skill.brst);
         this.damage = 1 * this.DAMAGE * this.skill.atk;
         this.penetration = 1 * (this.PENETRATION + 1.5 * (this.skill.brst + 0.8 * (this.skill.atk - 1)));
         if (this.settings.diesAtRange || !this.range) this.range = 1 * this.RANGE;
@@ -735,7 +731,6 @@ class Entity extends EventEmitter {
             size: this.size,
             realSize: this.realSize,
             health: this.health.display(),
-            shield: this.shield.display(),
             alpha: this.alpha,
             facing: this.facing,
             vfacing: this.vfacing,
@@ -965,14 +960,6 @@ class Entity extends EventEmitter {
             if (this.range < 0) this.kill();
         }
         if (this.settings.diesAtLowSpeed && !this.collisionArray.length && this.velocity.length < this.topSpeed / 2) this.health.amount -= this.health.getDamage(1 / global.gameManager.roomSpeed);
-        // Shield regen and damage
-        if (this.shield.max) {
-            if (this.damageReceived) {
-                let shieldDamage = this.shield.getDamage(this.damageReceived);
-                this.damageReceived -= shieldDamage;
-                this.shield.amount -= shieldDamage;
-            }
-        }
         // Health damage
         if (this.damageReceived) {
             let healthDamage = this.health.getDamage(this.damageReceived);

@@ -256,10 +256,10 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
                 };
             // Advanced damage calculations
             if (my.settings.ratioEffects) {
-                damage._me *= Math.min(1, Math.pow(Math.max(my.health.ratio, my.shield.ratio), 1 / my.penetration));
+                damage._me *= Math.min(1, Math.pow(my.health.ratio, 1 / my.penetration));
             }
             if (n.settings.ratioEffects) {
-                damage._n *= Math.min(1, Math.pow(Math.max(n.health.ratio, n.shield.ratio), 1 / n.penetration));
+                damage._n *= Math.min(1, Math.pow(n.health.ratio, 1 / n.penetration));
             }
             if (my.settings.damageEffects) {
                 damage._me *=
@@ -278,12 +278,6 @@ function advancedcollide(my, n, doDamage, doInelastic, nIsFirmCollide = false) {
                 _me: damage._me,
                 _n: damage._n,
             };
-            if (n.shield.max) {
-                damageToApply._me -= n.shield.getDamage(damageToApply._me);
-            }
-            if (my.shield.max) {
-                damageToApply._n -= my.shield.getDamage(damageToApply._n);
-            }
             let stuff = my.health.getDamage(damageToApply._n, false);
             deathFactor._me = (stuff > my.health.amount) ? my.health.amount / stuff : 1;
             stuff = n.health.getDamage(damageToApply._me, false);

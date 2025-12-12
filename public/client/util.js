@@ -294,11 +294,6 @@ const util = (function() {
                                 return 1;
                             },
                         },
-                        shield: {
-                            get: () => {
-                                return 1;
-                            },
-                        },
                     },
                 },
                 facing: mainMockup.facing,

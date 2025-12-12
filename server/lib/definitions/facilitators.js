@@ -5,7 +5,6 @@ let skcnv = {
     atk: 6,
     spd: 4,
     dam: 3,
-    shi: 5,
     str: 2,
     mob: 9,
     rld: 0,
@@ -67,12 +66,12 @@ exports.combineStats = function (stats) {
 }
 exports.setBuild = (build) => {
     let skills = build.split(build.includes("/") ? "/" : "").map((r) => +r);
-    if (skills.length !== 10)
-        throw new RangeError("Build must be made up of 10 numbers");
-    return [6, 4, 3, 5, 2, 9, 0, 1, 8, 7].map((r) => skills[r]);
+    if (skills.length !== 9)
+        throw new RangeError("Build must be made up of 9 numbers");
+    return [6, 4, 3, 5, 2, 0, 1, 8, 7].map((r) => skills[r]);
 }
 exports.skillSet = (args) => {
-    let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let skills = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let s in args) {
         if (!args.hasOwnProperty(s)) continue;
         skills[skcnv[s]] = Math.round(skill_cap * args[s]);
@@ -601,7 +600,7 @@ exports.makeMenu = (name = -1, color = "mirror", shape = 0, overrideLabel = fals
         UPGRADE_COLOR: color == "mirror" ? null : color,
         SHAPE: shape,
         IGNORED_BY_AI: true,
-        SKILL_CAP: Array(10).fill(dfltskl),
+        SKILL_CAP: Array(9).fill(dfltskl),
         RESET_CHILDREN: true,
     };
 }
@@ -924,7 +923,7 @@ exports.makeLaby = (type, tier, rarity, level, baseScale = 1) => {
             PENETRATION: type.BODY.PENETRATION,
             PUSHABILITY: type.BODY.PUSHABILITY / (level + 1) || 0,
             ACCELERATION: type.BODY.ACCELERATION,
-            SHIELD: 1e-9,
+            
             REGEN: 1e-18
         },
         INTANGIBLE: type.INTANGIBLE,

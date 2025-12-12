@@ -730,7 +730,6 @@ import * as socketStuff from "./socketinit.js";
         config.lag.unresponsive = false;
         config.graphical.sharpEdges = false;
         config.graphical.coloredHealthbars = true;
-        config.graphical.separatedHealthbars = true; // [DOGEIS NOTE] gonna remove shield anyways
         config.graphical.lowResolution = false//document.getElementById("optLowResolution").checked;
         config.graphical.showGrid = true
         config.graphical.slowerFOV = true;
@@ -2548,23 +2547,22 @@ import * as socketStuff from "./socketinit.js";
             let realSize = (size / m.size) * m.realSize;
 
             if (instance.drawsHealth) {
-                let health = instance.render.health.get(),
-                    shield = instance.render.shield.get();
+                let health = instance.render.health.get();
 
                 x += global.screenWidth / 2;
                 y += global.screenHeight / 2;
 
-                if (health < 0.99 || shield < 0.99 && global.GUIStatus.renderhealth) {
+                if (health < 0.99 && global.GUIStatus.renderhealth) {
                     let col = config.graphical.coloredHealthbars ? gameDraw.modifyColor(instance.color) : color.lgreen;
                     let yy = y + 1 + realSize + 15 * ratio;
                     let barWidth = 3 * ratio;
                     ctx[1].globalAlpha = alpha * alpha * fade;
 
                     //background bar
-                    drawBar(x - size, x + size, yy + barWidth, barWidth + config.graphical.borderChunk, color.black, ctx[1]);
+                    drawBar(x - size, x + size,                     yy + barWidth, barWidth + config.graphical.borderChunk, color.black, ctx[1]);
 
                     //hp bar
-                    drawBar(x - size, x - size + 2 * size * health, yy + barWidth, barWidth, col, ctx[1]);
+                    drawBar(x - size, x - size + 2 * size * health, yy + barWidth, barWidth,                                col,         ctx[1]);
 
                     if (gui.showhealthtext) drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + 10, 12 * ratio, color.guiwhite, "center");
                     ctx[1].globalAlpha = alpha;
@@ -2608,7 +2606,7 @@ import * as socketStuff from "./socketinit.js";
         let save = len;
         let x = global.screenWidth - spacing - (statMenu.get() - 1) * (height + 50 + len * ska(gui.skills.reduce((largest, skill) => Math.max(largest, skill.cap), 0)));
         let y = global.screenHeight - spacing - height;
-        let ticker = 11;
+        let ticker = 10;
         let namedata;
         try {
             namedata = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames);
@@ -3879,10 +3877,9 @@ import * as socketStuff from "./socketinit.js";
 
               //{ id: "optChatMessages",        label: "Chat Messages",         column: 1, row: 0, section: "appearance", tooltip: "Show chat messages." },
                 { id: "optRenderHealth",        label: "Health Bars",           column: 1, row: 1, section: "appearance", tooltip: "Show health bars." },
-                { id: "separatedHealthbars",    label: "Separate Shield Bar",   column: 1, row: 2, section: "appearance", tooltip: "Separate the shield bar from the health bar." },
               //{ id: "optCurvyTraps",          label: "Curvy Traps",           column: 1, row: 3, section: "appearance", tooltip: "Sharpen the corners of all polygons.\n" + "May slightly lower the frame rate." },
               //{ id: "optTankSkins",           label: "Tank Skins",            column: 1, row: 4, section: "appearance", tooltip: "Show tank skins.\n" + "Note: Skins will be in grayscale if the low WebGL driver is selected." },
-                { id: "coloredHealthbars",      label: "Colored Health Bars",   column: 1, row: 5, section: "appearance", tooltip: "Changes the health and shield color with their body color." },
+                { id: "coloredHealthbars",      label: "Colored Health Bars",   column: 1, row: 5, section: "appearance", tooltip: "Changes the health color with their body color." },
 
                 // UI Elements
               //{ id: "optUpgrades",            label: "Upgrades",              column: 0, row: 0, section: "ui", tooltip: "Toggle the visibility of the class and skill upgrade menus." },

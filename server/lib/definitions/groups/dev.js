@@ -9,7 +9,7 @@ Class.developer = {
     PARENT: "genericTank",
     LABEL: "Developer",
     BODY: {
-        SHIELD: 1000,
+        
         REGEN: 10,
         HEALTH: 100,
         DAMAGE: 10,
@@ -17,7 +17,7 @@ Class.developer = {
         FOV: 2,
     },
     //COLOR: "mirror", // todo: make sure mirror colour doesnt grey out your leaderboard
-    SKILL_CAP: Array(10).fill(dfltskl),
+    SKILL_CAP: Array(9).fill(dfltskl),
     IGNORED_BY_AI: true,
     RESET_CHILDREN: true,
     ACCEPTS_SCORE: true,
@@ -81,7 +81,7 @@ Class.spectator = {
         FOV: 2.5,
         DAMAGE: 0,
         HEALTH: 1e100,
-        SHIELD: 1e100,
+        
         REGEN: 1e100,
     },
     GUNS: [{

@@ -257,7 +257,7 @@ Class.turkey = {
     BODY: {
         SPEED: base.SPEED * 0.2,
         FOV: 1.5,
-        SHIELD: 0,
+        
         ACCEL: 0.2,
         SPEED: 0.3,
         HEALTH: 2000,

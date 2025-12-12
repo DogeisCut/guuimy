@@ -867,8 +867,8 @@ Class.antiTankMachineGunArm = {
     PARENT: "genericTank",
     COLOR: "grey",
     CONTROLLERS: ["mapTargetToGoal"],
-    SKILL_CAP: Array(10).fill(15),
-    SKILL: Array(10).fill(15),
+    SKILL_CAP: Array(9).fill(15),
+    SKILL: Array(9).fill(15),
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 2, 0, 0.2],
@@ -907,8 +907,8 @@ Class.cxATMGArm = {
     PARENT: "genericTank",
     COLOR: "white",
     SHAPE: [[0.1,0],[0.6,-0.8660254037844386],[1.1,0],[0.6,0.8660254037844386],[0.1,0],[-0.05,0.08660254037844387],[0.45,0.9526279441628825],[-0.55,0.9526279441628825],[-1.05,0.08660254037844387],[-0.05,0.08660254037844387],[0.1,0],[-0.05,-0.08660254037844387],[-1.05,-0.08660254037844387],[-0.55,-0.9526279441628825],[0.45,-0.9526279441628825],[-0.05,-0.08660254037844387]],
-    SKILL_CAP: Array(10).fill(15),
-    SKILL: Array(10).fill(15),
+    SKILL_CAP: Array(9).fill(15),
+    SKILL: Array(9).fill(15),
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 2, 0, 0.2],

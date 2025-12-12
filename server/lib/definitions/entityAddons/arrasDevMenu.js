@@ -304,7 +304,7 @@ Class.arrasMenu_youtuber = {
         SPEED: 20,
         HEALTH: 1e6,
         DAMAGE: 10,
-        SHIELD: 1e4,
+        
         REGEN: 10,
         FOV: base.FOV * 3,
     },

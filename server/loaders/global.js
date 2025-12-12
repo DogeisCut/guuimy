@@ -364,7 +364,6 @@ global.defineSplit = (() => {
             if (set.BODY.SPEED != null) my.SPEED *= set.BODY.SPEED;
             if (set.BODY.HEALTH != null) my.HEALTH *= set.BODY.HEALTH;
             if (set.BODY.RESIST != null) my.RESIST *= set.BODY.RESIST;
-            if (set.BODY.SHIELD != null) my.SHIELD *= set.BODY.SHIELD;
             if (set.BODY.REGEN != null) my.REGEN *= set.BODY.REGEN;
             if (set.BODY.DAMAGE != null) my.DAMAGE *= set.BODY.DAMAGE;
             if (set.BODY.PENETRATION != null) my.PENETRATION *= set.BODY.PENETRATION;

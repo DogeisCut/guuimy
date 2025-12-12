@@ -270,8 +270,7 @@ class MockupEntity {
             bullet_damage: set.STAT_NAMES?.BULLET_DAMAGE ?? 'Bullet Damage',
             reload: set.STAT_NAMES?.RELOAD ?? 'Reload',
             move_speed: set.STAT_NAMES?.MOVE_SPEED ?? 'Movement Speed',
-            shield_regen: set.STAT_NAMES?.SHIELD_REGEN ?? 'Shield Regeneration',
-            shield_cap: set.STAT_NAMES?.SHIELD_CAP ?? 'Shield Capacity',
+            regen: set.STAT_NAMES?.REGEN ?? 'Health Regeneration',
         };
         if (set.ALPHA != null) {
             this.alpha = ("number" === typeof set.ALPHA) ? set.ALPHA : set.ALPHA[1];

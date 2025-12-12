@@ -17,7 +17,7 @@ Class.basic = {
         HEALTH: base.HEALTH * 1,
         DAMAGE: base.DAMAGE * 1,
         PENETRATION: base.PENETRATION * 1,
-        SHIELD: base.SHIELD * 1,
+        
         REGEN: base.REGEN * 1,
         FOV: base.FOV * 1,
         DENSITY: base.DENSITY * 1,
@@ -1090,7 +1090,7 @@ Class.triAngle = {
     LABEL: "Tri-Angle",
     BODY: {
         HEALTH: 0.8 * base.HEALTH,
-        SHIELD: 0.8 * base.SHIELD,
+        
         DENSITY: 0.6 * base.DENSITY,
     },
     DANGER: 6,
@@ -1314,7 +1314,7 @@ Class.ambulance = {
     HEALING_TANK: true, // Mainly for bots to recognize the tank
     BODY: {
         HEALTH: base.HEALTH * 0.8,
-        SHIELD: base.SHIELD * 0.8,
+        
         DENSITY: base.DENSITY * 0.6,
     },
     TURRETS: [
@@ -1442,10 +1442,10 @@ Class.autoSmasher = makeAuto({
         BULLET_HEALTH: smshskl,
         BULLET_DAMAGE: smshskl,
         BULLET_SPEED: smshskl,
-        SHIELD_CAPACITY: smshskl,
+        
         BODY_DAMAGE: smshskl,
         MAX_HEALTH: smshskl,
-        SHIELD_REGENERATION: smshskl,
+        
         MOVEMENT_SPEED: smshskl
     },
 }, "Auto-Smasher", {type: "autoSmasherTurret", size: 11})
@@ -1789,7 +1789,7 @@ Class.booster = {
     LABEL: "Booster",
     BODY: {
         HEALTH: base.HEALTH * 0.4,
-        SHIELD: base.SHIELD * 0.4,
+        
         DENSITY: base.DENSITY * 0.3
     },
     DANGER: 7,
@@ -2759,7 +2759,7 @@ Class.jumpSmasher = {
         SPEED: 1.15 * base.SPEED,
         DENSITY: 1 * base.DENSITY,
         HEALTH: 1 * base.HEALTH * 1.4,
-        SHIELD: 1 * base.SHIELD * 1.4
+        
     },
     TURRETS: [
         {
@@ -2895,7 +2895,7 @@ Class.master = {
     LABEL: "Master",
     BODY: {
         HEALTH: base.HEALTH * 0.4,
-        SHIELD: base.SHIELD * 0.4,
+        
         DENSITY: base.DENSITY * 0.3,
     },
     DANGER: 8,
@@ -3112,7 +3112,7 @@ Class.monsoon = {
         DENSITY: 2 * base.DENSITY
     },
     STAT_NAMES: statnames.whirlwind,
-    SKILL_CAP: Array(10).fill(smshskl),
+    SKILL_CAP: Array(9).fill(smshskl),
     TURRETS: [
         {
             POSITION: [26, 0, 0, 0, 360, 0],
@@ -3918,7 +3918,7 @@ Class.rocket = {
     LABEL: "Rocket",
     BODY: {
         HEALTH: base.HEALTH * 0.4,
-        SHIELD: base.SHIELD * 0.4,
+        
         DENSITY: base.DENSITY * 0.3
     },
     DANGER: 7,

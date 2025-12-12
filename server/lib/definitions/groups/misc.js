@@ -15,7 +15,7 @@ Class.rock = {
     BODY: {
         PUSHABILITY: 0,
         HEALTH: 10000,
-        SHIELD: 10000,
+        
         REGEN: 1000,
         DAMAGE: 1,
         RESIST: 100,
@@ -189,7 +189,7 @@ Class.dominator = {
         FOV: 0.5,
         PUSHABILITY: 0,
         HETERO: 0,
-        SHIELD: base.SHIELD * 1.4
+        
     },
     CONTROLLERS: ["nearestDifferentMaster", ["spin", { onlyWhenIdle: true }]],
     AI: { IGNORE_SHAPES: true },
@@ -309,7 +309,7 @@ Class.sanctuary = {
     BODY: {
         HEALTH: 1280,
         DAMAGE: 5.5,
-        SHIELD: base.SHIELD * 1.2,
+        
     },
     TURRETS: [{
         POSITION: { SIZE: 22 },
@@ -393,7 +393,6 @@ Class.sentry = {
         spd: 1,
         atk: 0.5,
         hlt: 0,
-        shi: 0,
         rgn: 0.7,
         mob: 0,
     }),
@@ -521,7 +520,6 @@ Class.sentinel = {
         atk: 0.5, //bullet speed
         spd: 0.6, //body damage
         hlt: 0.85, //max health
-        shi: 0.45, //shield capacity
         rgn: 0.35, //shield regeneration
         mob: 0, //movement speed
     }),
@@ -535,7 +533,7 @@ Class.sentinel = {
         DAMAGE: base.DAMAGE * 2.1,
         SPEED: base.SPEED * 0.4,
         HEALTH: base.HEALTH * 2.1,
-        SHIELD: base.SHIELD * 2.1,
+        
         REGEN: base.REGEN * 0.15,
     },
     MOTION_TYPE: "motor",
@@ -677,7 +675,7 @@ Class.baseProtector = {
         HEALTH: 1e4,
         DAMAGE: 10,
         PENETRATION: 0.25,
-        SHIELD: 1e3,
+        
         REGEN: 100,
         FOV: 1,
         PUSHABILITY: 0,
@@ -718,7 +716,7 @@ Class.mothership = {
     BODY: {
         REGEN: 0.5,
         FOV: 1,
-        SHIELD: 0,
+        
         ACCEL: 0.2,
         SPEED: 0.3,
         HEALTH: 4000,
@@ -787,7 +785,7 @@ Class.arenaCloser = {
         FOV: 10,
         SPEED: 6,
     },
-    SKILL: skillSet({ rld: 1, dam: 1, pen: 1, str: 1, spd: 1, atk: 1, hlt: 1, shi: 1, rgn: 1, mob: 1 }),
+    SKILL: skillSet({ rld: 1, dam: 1, pen: 1, str: 1, spd: 1, atk: 1, hlt: 1, rgn: 1, mob: 1 }),
     DRAW_HEALTH: false,
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
@@ -819,10 +817,10 @@ Class.antiTankMachineGun = {
         FOV: 1.35,
         PUSHABILITY: 0,
         HETERO: 0,
-        SHIELD: base.SHIELD * 1.4,
+        
     },
-    SKILL_CAP: Array(10).fill(15),
-    SKILL: Array(10).fill(15),
+    SKILL_CAP: Array(9).fill(15),
+    SKILL: Array(9).fill(15),
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 2, 0, 0.2],
@@ -890,10 +888,10 @@ Class.cxATMG = {
         FOV: 1.35,
         PUSHABILITY: 0,
         HETERO: 0,
-        SHIELD: base.SHIELD * 1.4,
+        
     },
-    SKILL_CAP: Array(10).fill(15),
-    SKILL: Array(10).fill(15),
+    SKILL_CAP: Array(9).fill(15),
+    SKILL: Array(9).fill(15),
     GUNS: [
         {
             POSITION: [15, 2.5, 1, 0, 2, 0, 0.2],
@@ -996,7 +994,7 @@ Class.serverPortal = {
         FOV: 2.5,
         DAMAGE: 0,
         HEALTH: 1e100,
-        SHIELD: 1e100,
+        
         REGEN: 1e100,
         PUSHABILITY: 0,
         DENSITY: 0,
