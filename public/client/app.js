@@ -2694,7 +2694,7 @@ import * as socketStuff from "./socketinit.js";
             // Draw skillpoints to spend
             drawText(gui.points + "x", Math.round(x - len - 2) - 13, global.screenHeight - spacing , 32, color.guiwhite, "right");
         }
-        drawText("Stats", x-(len/2), Math.round(y + height - 4) + 2, 32, color.guiwhite, "center", false);
+        drawText("Skills", x-(len/2), Math.round(y + height - 4) + 2, 32, color.guiwhite, "center", false);
     }
 
     function drawSelfInfo(spacing, max) {

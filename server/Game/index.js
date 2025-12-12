@@ -306,10 +306,10 @@ class gameHandler {
             return o;
         };
 
-        if (Math.random() >= 0.1) return; // 1/10 chance to spawn food
+        if (Math.random() >= Config.food_spawn_chance) return; // 1/10 chance to spawn food
 
         let totalFoods = 1;
-        if (Math.random() < 0.2) { // 1/5 chance to spawn a group
+        if (Math.random() < Config.group_spawn_chance) { // 1/5 chance to spawn a group
             totalFoods = 1 + Math.floor(Math.random() * Config.food_group_cap);
         }
 

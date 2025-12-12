@@ -27,8 +27,8 @@ Class.single = {
     GUNS: [
         {
             POSITION: {
-                LENGTH: 18,
-                WIDTH: 8,
+                LENGTH: 20,
+                WIDTH: 10,
                 ASPECT: 1,
                 X: 0,
                 Y: 0,

@@ -31,14 +31,14 @@ function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shap
 
 	const polygonLabel = getPolygonLabelFromSideCount(absolutePolygonSideCount)
 
-	const polygonDamageMultiplier = Math.pow(absolutePolygonSideCount, 1.2)
-	const polygonHealthMultiplier = Math.pow(absolutePolygonSideCount, 2)
+	const polygonDamageMultiplier = Math.pow(absolutePolygonSideCount, 1.5)
+	const polygonHealthMultiplier = Math.pow(absolutePolygonSideCount, 1.5)
 
 	const polygonDamageValue = polygonDamageMultiplier * basePolygonDamageValue
 	const polygonHealthValue = polygonHealthMultiplier * basePolygonHealthValue
 
-	const polygonValue = Math.floor(Math.pow(absolutePolygonSideCount, 3) * 5)
-	const polygonSize = Math.pow(absolutePolygonSideCount, 1.8)
+	const polygonValue = Math.floor(Math.pow(absolutePolygonSideCount, 5) * 5)
+	const polygonSize = Math.pow(absolutePolygonSideCount, 2) + polygonSideCount
 	const polygonDensity = 2 + absolutePolygonSideCount
 	const polygonResist = 1 + absolutePolygonSideCount * 0.05
 	const polygonPenetration = 2.5 / Math.sqrt(absolutePolygonSideCount)
@@ -59,7 +59,7 @@ function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shap
 			PENETRATION: polygonPenetration,
 			ACCELERATION: polygonAcceleration
 		},
-		DRAW_HEALTH: true
+        DRAW_HEALTH: true,
 	}
 }
 
@@ -68,13 +68,21 @@ Class.duogon = generatePolygonFoodClassDefinition(2, "yellow", [[-1,0],[1,0]])
 Class.triangle = generatePolygonFoodClassDefinition(3, "gold")
 Class.square = generatePolygonFoodClassDefinition(4, "orange")
 Class.pentagon = generatePolygonFoodClassDefinition(5, "lavender")
+Class.pentagon.GIVE_KILL_MESSAGE = true
 Class.hexagon = generatePolygonFoodClassDefinition(6, "aqua")
+Class.hexagon.GIVE_KILL_MESSAGE = true
 Class.heptagon = generatePolygonFoodClassDefinition(7, "teal")
+Class.heptagon.GIVE_KILL_MESSAGE = true
 Class.octogon = generatePolygonFoodClassDefinition(8, "pink")
+Class.octogon.GIVE_KILL_MESSAGE = true
 Class.nonagon = generatePolygonFoodClassDefinition(9, "white")
+Class.nonagon.GIVE_KILL_MESSAGE = true
 Class.decagon = generatePolygonFoodClassDefinition(10, "grey")
+Class.decagon.GIVE_KILL_MESSAGE = true
 Class.hendecagon = generatePolygonFoodClassDefinition(11, "black")
+Class.hendecagon.GIVE_KILL_MESSAGE = true
 Class.dodecagon = generatePolygonFoodClassDefinition(11, "guiblack")
+Class.dodecagon.GIVE_KILL_MESSAGE = true
 
 /*
 Class.triangle = {

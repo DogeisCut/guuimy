@@ -95,7 +95,7 @@ module.exports = {
     // Food
     food_types: [ // Possible food types outside the nest
         [1, [
-            [1, "monogon"], [1/12*11, "duogon"], [1/12*10, "triangle"], [1/12*9, "square"], [1/12*8, "pentagon"], [1/12*7, "hexagon"], [1/12*6, "heptagon"], [1/12*5, "octogon"], [1/12*4, "nonagon"], [1/12*3, "decagon"], [1/12*2, "hendecagon"], [1/12, "dodecagon"]
+            [2048, "monogon"], [1024, "duogon"], [512, "triangle"], [256, "square"], [128, "pentagon"], [64, "hexagon"], [32, "heptagon"], [16, "octogon"], [8, "nonagon"], [4, "decagon"], [2, "hendecagon"], [1, "dodecagon"]
         ]],
     ],
     food_types_nest: [ // Possible food types in the nest
@@ -103,8 +103,11 @@ module.exports = {
     enemy_types_nest: [ // Possible enemy food types in the nest
     ],
 
-    food_cap: 1000, // Maximum number of regular food at any time.
+    food_cap: 250, // Maximum number of regular food at any time.
     food_group_cap: 10, // Number of foods that random food groups spawn with
+    food_spawn_chance: 1,
+    group_spawn_chance: 0.02,
+    
 
     // Bosses
     bosses_spawn: true,

@@ -1,0 +1,44 @@
+- [ ] **Tanks**
+    - [ ] Level 60 Tanks
+    - [ ] Level 45 Tanks
+    - [ ] Level 30 Tanks
+    - [ ] Level 15 Tanks
+    - [ ] Level 0 Tanks
+        - [ ] Decide if this tier should even exist
+    - [ ] Tank
+        - [X] Single
+            - [ ] Double
+            - [ ] Stack
+                - Mini Streamliner
+        - [ ] Blocker
+            - Trapper
+        - [ ] Commander
+            - Director
+- [ ] **Mechanics**
+    - [ ] Find main gimmick.
+        - I think i want to make higher tier tanks get another layer, kinda like arras tiered shapes. and perhaps get a little larger.
+            - Not really good enough for the "main gimmick" though
+    - [ ] Change score deduction on death
+        - Score is reduced half, but gets stronger the higher you are past max level (60). The idea is if you died at like level 60, you'd respawn at level 30. and If you died at like level 600, you'd probably spawn at level 60 or something.
+    - [ ] Change level caculation to be more gradual.\
+    - [ ] Merge bullet health and penetration into just bullet penetration.
+- [ ] **Polygons**
+    - [ ] Decide on final polygon layout/score/health/etc (not sure about the duogons and monogons, at least having them be so beefy)
+    - [ ]
+    - [ ] Radiance
+        - [ ] Client rendering
+        - [ ] Server
+- [ ] **Visuals and UI**
+    - [X] Border Width
+    - [X] Upgrades
+    - [X] Minimap
+    - [X] Self Info
+    - [X] Skills
+    - [X] Leaderboard
+    - [X] Misc (hardcoded settings)
+    - [X] Colors
+    - [X] Font
+    - [X] Player Names/Score
+    - [ ] Tank Tree
+    - [ ] Death Screen
+    - [ ] Disconnect Screen

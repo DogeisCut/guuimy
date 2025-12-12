@@ -16,6 +16,7 @@ teamCheck = (tile, team) => {
 teamRoomCheck = (tile, team, room) => {
     if (!room.spawnable[team]) room.spawnable[team] = [];
     room.spawnable[team].push(tile);
+    room.spawnableDefault.push(tile)
 };
 
 // Team -1 (blue)
