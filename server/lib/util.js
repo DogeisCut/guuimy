@@ -210,37 +210,98 @@ exports.isStringified = (str) => {
     } catch(e) { return str } 
 }
 
-exports.getClassDPS = (classDefinition, reloadSkillPoints = 1) => {  
-    const def = typeof classDefinition === 'string' ? Class[classDefinition] : classDefinition;  
-    if (!def || !def.GUNS) return 0;  
+exports.getTimeToKill = (attackerEntity, targetEntity) => {  
+    // Helper function to recursively collect all guns from an entity and its turrets  
+    function getAllGuns(entity, collectedGuns = []) {  
+        // Get guns from the entity itself  
+        for (let gun of entity.guns.values()) {  
+            if (gun.canShoot) {  
+                collectedGuns.push({  
+                    gun: gun,  
+                    owner: entity  
+                });  
+            }  
+        }  
+          
+        // Recursively get guns from turrets  
+        for (let turret of entity.turrets.values()) {  
+            getAllGuns(turret, collectedGuns);  
+        }  
+          
+        return collectedGuns;  
+    }  
+      
+    // Helper function to get guns that bullets will spawn with  
+    function getBulletGuns(gun) {  
+        let bulletGuns = [];  
+        if (gun.bulletType && gun.bulletType.GUNS) {  
+            // Bullets can have their own guns  
+            for (let gunDef of gun.bulletType.GUNS) {  
+                // These would need to be evaluated similarly  
+                bulletGuns.push(gunDef);  
+            }  
+        }  
+        return bulletGuns;  
+    }  
+      
+    // Collect all guns from attacker  
+    let allGuns = getAllGuns(attackerEntity);  
       
     let totalDPS = 0;  
       
-    for (const gun of def.GUNS) {  
-        if (!gun.PROPERTIES || !gun.PROPERTIES.SHOOT_SETTINGS) continue;  
+    for (let {gun, owner} of allGuns) {  
+        let bulletStats = gun.interpret();  
+        if (!bulletStats) continue;  
           
-        const shootSettings = gun.PROPERTIES.SHOOT_SETTINGS;  
+        let skill = gun.bulletStats === "master" ? owner.skill : gun.bulletStats;  
           
-        const damagePerShot = shootSettings.damage || 1;  
+        let reloadTime = gun.settings.reload * skill.rld;  
+        let fireRate = 1 / reloadTime;  
           
-        const baseReloadTime = shootSettings.reload || 1;  
-        const effectiveReloadTime = baseReloadTime / reloadSkillPoints;  
-        const shotsPerSecond = 1 / effectiveReloadTime;
+        let bulletSpeed = bulletStats.SPEED * gun.settings.speed;  
+        let bulletMaxSpeed = bulletStats.SPEED;  
           
-        totalDPS += damagePerShot * shotsPerSecond;  
+        let speedFactor = bulletMaxSpeed > 0 ? Math.pow(bulletSpeed / bulletMaxSpeed, 0.25) : 1;  
+        let speedMultiplier = Math.min(2, Math.max(speedFactor, 1) * speedFactor);  
+          
+        let attackerResist = owner.health.resist;  
+        let targetResist = targetEntity.health.resist;  
+        let resistDiff = attackerResist - targetResist;  
+          
+        let baseDamage = bulletStats.DAMAGE;  
+          
+        let damagePerHit = Config.damage_multiplier *   
+            baseDamage *   
+            (1 + resistDiff) *   
+            speedMultiplier;  
+          
+        if (owner.settings.damageClass === targetEntity.settings.damageClass) {  
+            damagePerHit *= (1 + targetEntity.heteroMultiplier);  
+        }  
+          
+        if (owner.settings.buffVsFood && targetEntity.settings.damageType === 1) {  
+            damagePerHit *= 3;  
+        }  
+          
+        let gunDPS = damagePerHit * fireRate;  
+        totalDPS += gunDPS;  
+          
+        // Note: This is a simplified calculation. In reality, we'd need to consider:  
+        // - Bullet penetration vs target health  
+        // - Damage effects and ratio effects  
+        // - Regeneration of target  
+        // - Nested Guns (turrets, etc)
+        
+        // Basically this tends to overpredict. Due to this inaccuracies
+    }  
+
+    const overpredictionCompensation = 2
+      
+    let targetHealth = targetEntity.health.amount;  
+      
+    if (totalDPS <= 0) {  
+        return Infinity;
     }  
       
-    return totalDPS;  
-}
-
-exports.getTimeToKill = (attackerClass, targetEntity, reloadSkillPoints = 1) => {  
-    const attackerDPS = exports.getTankDPS(attackerClass, reloadSkillPoints);  
-    if (attackerDPS <= 0) return Infinity;  
-      
-    const targetHealth = targetEntity.health.amount;  
-    const targetResist = targetEntity.health.resist || 0;  
-    const effectiveDamagePerSecond = attackerDPS * (1 - targetResist);  
-      
-    if (effectiveDamagePerSecond <= 0) return Infinity;  
-    return targetHealth / effectiveDamagePerSecond;  
-}
+    return (targetHealth / totalDPS) / overpredictionCompensation;  
+};

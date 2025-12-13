@@ -4,6 +4,8 @@ module.exports = {
 	smshskl: 12,
 
 	polygonSideBase: 2,
+	basePolygonDamageValue: 1,
+	basePolygonHealthValue: 2,
 
 	// NAMES
 	statnames: {

@@ -1,4 +1,4 @@
-const { polygonSideBase } = require('../constants.js');
+const { polygonSideBase, basePolygonDamageValue, basePolygonHealthValue } = require('../constants.js');
 
 function getPolygonLabelFromSideCount(polygonSideCount) {
     const polygonNameMap = {
@@ -24,9 +24,6 @@ function getPolygonLabelFromSideCount(polygonSideCount) {
 }
 
 function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shapeOverride = polygonSideCount) {
-	const basePolygonDamageValue = 1
-    const basePolygonHealthValue = 2
-    
     const absolutePolygonSideCount = Math.abs(polygonSideCount)
     const offsetPolygonSideCount = absolutePolygonSideCount - polygonSideBase
 
@@ -38,7 +35,7 @@ function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shap
 	const polygonDamageValue = polygonDamageMultiplier * basePolygonDamageValue
 	const polygonHealthValue = polygonHealthMultiplier * basePolygonHealthValue
 
-	const polygonValue = Math.floor(Math.pow(absolutePolygonSideCount, 5) * 5)
+	const polygonValue = Math.floor(Math.pow(absolutePolygonSideCount - polygonSideBase, 5) * 5)
 	const polygonSize = Math.pow(absolutePolygonSideCount, 2) + polygonSideCount
 	const polygonDensity = 2 + offsetPolygonSideCount
 	const polygonResist = 1 + offsetPolygonSideCount * 0.05

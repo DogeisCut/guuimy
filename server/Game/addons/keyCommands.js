@@ -537,18 +537,13 @@ function init() {
             }
         },
         {
-            name: "Police",
-            keys: [[[80, "P"]]],
+            name: "Time To Kill",
+            keys: [[[70, "F"]]],
             level: 1,
-            run: ({ player, gameManager }) => {
-                player.body.define({ RESET_UPGRADES: true });
-                player.body.define("undercoverCop");
-                player.body.name = "TEAM POLICE";
-                let skills = Array(9).fill(15);
-                player.body.skill.setCaps(skills);
-                player.body.skill.set(skills);
-                player.body.FOV = 2;
-                gameManager.socketManager.broadcast("WOOP WOOP! That's the sound of da police!");
+            run: ({ socket, player }) => {
+                selectedEntities(player, (o) => {
+                    socket.talk("m", 3_000, "" + util.getTimeToKill(player.body, o));
+                });    
             }
         },
         {

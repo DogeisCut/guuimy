@@ -26,6 +26,7 @@
         - Score is reduced half, but gets stronger the higher you are past max level (60). The idea is if you died at like level 60, you'd respawn at level 30. and If you died at like level 600, you'd probably spawn at level 60 or something.
     - [ ] Change level caculation to be more gradual.\
     - [ ] Merge bullet health and penetration into just bullet penetration.
+    - [ ] Shared XP for kills like scenexe (could give percentage notification)
 - [ ] **Polygons**
     - [ ] Decide on final polygon layout/score/health/etc
         - not sure about the duogons and monogons, at least having them be so beefy

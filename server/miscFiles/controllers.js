@@ -1222,6 +1222,14 @@ class io_scaleWithMaster extends IO {
 class io_advancedBotAI extends IO {  
     constructor(body, opts = {}) {  
         super(body);  
+
+        // TODO:
+        // - A lot
+        // - Simulated Mouse cursor
+        // I, dogeiscut, will handle this.
+        // - Squads
+        // - Helper functions for states
+        // - This list
     
 
         const personalities = {  
@@ -1246,7 +1254,15 @@ class io_advancedBotAI extends IO {
             loop() {
                 if (this.currentState)
                     return this.states[this.currentState].loop()
-                return {}
+                return {
+                    goal: {
+                        x: this.body.x,
+                        y: this.body.y
+                    },
+                    main:false,
+                    alt:false,
+                    fire:false
+                }
             }
             transition(to) {
                 if (!to) throw "Invalid State Transition!"
@@ -1260,47 +1276,45 @@ class io_advancedBotAI extends IO {
         }
         // AI states!
         class FarmingState extends State {
-            constructor(stateMachine, body) {
+            // TODO:
+            // - sweep behavior
+            //  Higher level tanks tend to be able to destory clusters of low level shapes efficently. These tanks will often swipe their drones or bullets through a large cluster for a score boost.
+            //  Not all bots should do this, as some bots would be considerate to lower level tanks
+            // - Desprate Ram
+            //  Often times, if multiple low level players are attacking a high level shape, and its at low health, players will attempt to ram it to get the kill
+            // - Commitment
+            //  The longer a bot has been trying to kill a specific shape, the higher it scores in its target calculation, meaning its less likely to switch targets
+            constructor(stateMachine, controller) {
                 super(stateMachine)
-                this.body = body
-            }
-            //from nearestDifferentMaster (Modified for Advanced Bots)
-            validate(e, m, sqrRange) {
-                // e is the target entity
-                // m is myself
-                const myMaster = this.body.master.master;
-                const aiSettings = this.body.aiSettings;
-                const theirMaster = e.master.master;
-                if (e.health.amount <= 0) return false; // dont target things with 0 or less health (dont target dead things)
-                if (theirMaster.team === myMaster.team || theirMaster.team === TEAM_ROOM) return false; //Dont target my team or Room (walls)
-                if (theirMaster.ignoredByAi) return false; //If this thing does not want to be seen by me, then fine
-                if (e.bond) return false; // dont target tank turrets (auto turrets)
-                if (e.invuln || e.godmode || theirMaster.godmode || theirMaster.passive || myMaster.passive) return false; //dont target god mode
-                if (isNaN(e.dangerValue)) return false; // Dont target things with fucked Danger values
-                if (!(aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5)) return false; //Dont target arena closer or invisible things (arena closer scary :()
-                // Check if this thing is in range
-                if ((e.x - m.x) * (e.x - m.x) >= sqrRange) return false;
-                if ((e.y - m.y) * (e.y - m.y) >= sqrRange) return false;
-                return true;
+                this.controller = controller
+                this.body = controller.body
             }
             loop() {
-                const maxTimeWasted = 12739 // Max time I should spend attacking a shape (dont waste time on big health shapes I cant kill)
+                const maxTimeWasted = 20 // Max time I should spend attacking a shape (dont waste time on big health shapes I cant kill)
                 const sqrRange = this.body.fov * this.body.fov;
                 const validCandidates = [];
                 for (const e of targetableEntities.values()) {
-                    if (this.validate(e, this.body, sqrRange)) {
+                    if (this.controller.validate(e, this.body, sqrRange)) {
                         validCandidates.push(e);
                     }
                 }
                 
-                const validFood = validCandidates.filter(entity=>{entity.type == "food"})
-                .filter(food=>util.getTimeToKill(this.body.defs[0], food, this.body.skill.rld)<maxTimeWasted)
-                .sort((a,b)=>{a.skill.score - b.skill.score})
+                const validFood = validCandidates/* I just want to note that its funny to remove this filter and watch the bots try to farm enemy bots */.filter(entity=>entity.type == "food")/**/
+                .filter(food=>util.getTimeToKill(this.body, food)<maxTimeWasted)
+                .sort((a,b)=>{   
+                    const distA = (this.body.x - a.x) ** 2 + (this.body.y - a.y) ** 2;  
+                    const distB = (this.body.x - b.x) ** 2 + (this.body.y - b.y) ** 2;  
+                    
+                    const scoreA = a.skill.score - distA / 100; 
+                    const scoreB = b.skill.score - distB / 100;  
+                    
+                    return scoreB - scoreA;  
+                })
 
                 if (validFood.length!=0) {
                     const bestFood = validFood[0]
-                    const distanceToBestFoodSqr = (this.body.x - bestFood.x) * (this.body.x - bestFood.x)
-                    const minimumDistanceToFood = (bestFood.SIZE * 2 + 30)**2
+                    const distanceToBestFoodSqr = (this.body.x - bestFood.x) ** 2 + (this.body.y - bestFood.y) ** 2
+                    const minimumDistanceToFood = (bestFood.size + this.body.size + 100) ** 2
                     let goal = {
                         x: bestFood.x,
                         y: bestFood.y
@@ -1315,13 +1329,13 @@ class io_advancedBotAI extends IO {
 
                     return {
                         target: {
-                            x:goal.x - this.body.x,
-                            y:goal.y - this.body.y
+                            x: bestFood.x - this.body.x,
+                            y: bestFood.y - this.body.y
                         },
                         goal,
                         main:true,
                         alt:false,
-                        fire:false,
+                        fire:true,
                         power: 1
                     }
                 }
@@ -1338,45 +1352,42 @@ class io_advancedBotAI extends IO {
             }
         }
         this.stateMachine = new StateMachine()
-        this.stateMachine.states.farm = new FarmingState(this.stateMachine, this.body)
+        this.stateMachine.states.farm = new FarmingState(this.stateMachine, this)
         this.stateMachine.transition("farm")
     } 
-    think() {
-        return this.stateMachine.loop()
+
+    /* HELPER FUNCTIONS: intended to be used within states */
+    avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass() {
+        // Bots will move a slightly different direction until their movement path doesnt intersect with something damaging... like shapes...
     }
-    buildList(range) {
-        const sqrRange = range * range;
-        const validCandidates = [];
-        for (const e of targetableEntities.values()) {
-            if (this.validate(e, this.body, sqrRange)) {
-                validCandidates.push(e);
-            }
-        }
-        if (!validCandidates.length) {
-            this.targetLock = undefined;
-            return [];
-        }
-        let mostDangerous = 0;
-        for (const e of validCandidates) {
-            mostDangerous = Math.max(e.dangerValue, mostDangerous);
-        }
-        let keepTarget = false;
-        const finalTargets = validCandidates.filter(e => {
-            if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
-                if (this.targetLock && e.id === this.targetLock.id) {
-                    keepTarget = true;
-                }
-                return true;
-            }
-            return false;
-        });
-        // Reset target if it's not in there
-        if (!keepTarget) {
-            this.targetLock = undefined;
-        }
-        return finalTargets;
+    compressMovementLikeWASD() {
+        // Unfortunetly not as simple as just snapping movements to angles of 45 degrees, as they will alternate keys and it will end up looking the same.
+        // For best results it may be worth randomly disabling one of the movement keys when the bot is moving diagonally. and how this is done and chosen is based on personality
+    }
+    //from nearestDifferentMaster (Modified for Advanced Bots)
+    validate(e, m, sqrRange) {
+        // e is the target entity
+        // m is myself
+        const myMaster = this.body.master.master;
+        const aiSettings = this.body.aiSettings;
+        const theirMaster = e.master.master;
+        if (e.health.amount <= 0) return false; // dont target things with 0 or less health (dont target dead things)
+        if (theirMaster.team === myMaster.team || theirMaster.team === TEAM_ROOM) return false; //Dont target my team or Room (walls)
+        if (theirMaster.ignoredByAi) return false; //If this thing does not want to be seen by me, then fine
+        if (e.bond) return false; // dont target tank turrets (auto turrets)
+        if (e.invuln || e.godmode || theirMaster.godmode || theirMaster.passive || myMaster.passive) return false; //dont target god mode
+        if (isNaN(e.dangerValue)) return false; // Dont target things with fucked Danger values
+        if (!(aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5)) return false; //Dont target arena closer or invisible things (arena closer scary :()
+        // Check if this thing is in range
+        if ((e.x - m.x) * (e.x - m.x) >= sqrRange) return false;
+        if ((e.y - m.y) * (e.y - m.y) >= sqrRange) return false;
+        return true;
     }
 
+    think() {
+        const result = this.stateMachine.loop()
+        return result
+    }
 
 }  
 
