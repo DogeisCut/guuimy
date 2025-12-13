@@ -3,6 +3,8 @@ module.exports = {
 	dfltskl: 9,
 	smshskl: 12,
 
+	polygonSideBase: 2,
+
 	// NAMES
 	statnames: {
 		generic: {

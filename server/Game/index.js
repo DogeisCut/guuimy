@@ -435,10 +435,12 @@ class gameHandler {
             let CC = Class[o.defs[0]];
             if (!CC) CC = {};
             o.controllers = [];
-            o.define({
-                CONTROLLERS: CC.CONTROLLERS ? [...Class.bot.CONTROLLERS, ...CC.CONTROLLERS] : Class.bot.CONTROLLERS,
-                FACING_TYPE: CC.FACING_TYPE ? CC.FACING_TYPE : Class.bot.FACING_TYPE,
-                AI: Class.bot.AI,
+            o.define({  
+                CONTROLLERS: Config.use_advanced_bot_ai   
+                    ? Class.advancedBot.CONTROLLERS   
+                    : (CC.CONTROLLERS ? [...Class.bot.CONTROLLERS, ...CC.CONTROLLERS] : Class.bot.CONTROLLERS),  
+                FACING_TYPE: CC.FACING_TYPE ? CC.FACING_TYPE : Class.bot.FACING_TYPE,  
+                AI: Config.use_advanced_bot_ai ? Class.advancedBot.AI : Class.bot.AI,  
             }, false, true, false)
             if (CC && CC.HEALING_TANK) {
                 o.controllers = [];

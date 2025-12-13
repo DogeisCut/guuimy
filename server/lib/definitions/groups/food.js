@@ -1,4 +1,4 @@
-const { basePolygonDamage, basePolygonHealth } = require('../constants.js');
+const { polygonSideBase } = require('../constants.js');
 
 function getPolygonLabelFromSideCount(polygonSideCount) {
     const polygonNameMap = {
@@ -28,21 +28,22 @@ function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shap
     const basePolygonHealthValue = 2
     
     const absolutePolygonSideCount = Math.abs(polygonSideCount)
+    const offsetPolygonSideCount = absolutePolygonSideCount - polygonSideBase
 
 	const polygonLabel = getPolygonLabelFromSideCount(absolutePolygonSideCount)
 
-	const polygonDamageMultiplier = Math.pow(absolutePolygonSideCount, 1.5)
-	const polygonHealthMultiplier = Math.pow(absolutePolygonSideCount, 1.5)
+	const polygonDamageMultiplier = Math.pow(offsetPolygonSideCount, 1.5)
+	const polygonHealthMultiplier = Math.pow(offsetPolygonSideCount, 1.5)
 
 	const polygonDamageValue = polygonDamageMultiplier * basePolygonDamageValue
 	const polygonHealthValue = polygonHealthMultiplier * basePolygonHealthValue
 
 	const polygonValue = Math.floor(Math.pow(absolutePolygonSideCount, 5) * 5)
 	const polygonSize = Math.pow(absolutePolygonSideCount, 2) + polygonSideCount
-	const polygonDensity = 2 + absolutePolygonSideCount
-	const polygonResist = 1 + absolutePolygonSideCount * 0.05
-	const polygonPenetration = 2.5 / Math.sqrt(absolutePolygonSideCount)
-	const polygonAcceleration = 0.01 / Math.sqrt(absolutePolygonSideCount)
+	const polygonDensity = 2 + offsetPolygonSideCount
+	const polygonResist = 1 + offsetPolygonSideCount * 0.05
+	const polygonPenetration = 2.5 / Math.sqrt(offsetPolygonSideCount)
+	const polygonAcceleration = 0.01 / Math.sqrt(offsetPolygonSideCount)
 
 	return {
 		PARENT: "food",
@@ -63,8 +64,8 @@ function generatePolygonFoodClassDefinition(polygonSideCount, polygonColor, shap
 	}
 }
 
-Class.monogon = generatePolygonFoodClassDefinition(1, "#ffffff", [[0,0],[0,0]])
-Class.duogon = generatePolygonFoodClassDefinition(2, "yellow", [[-1,0],[1,0]])
+//Class.monogon = generatePolygonFoodClassDefinition(1, "#ffffff", [[0,0],[0,0]])
+//Class.duogon = generatePolygonFoodClassDefinition(2, "yellow", [[-1,0],[1,0]])
 Class.triangle = generatePolygonFoodClassDefinition(3, "gold")
 Class.square = generatePolygonFoodClassDefinition(4, "orange")
 Class.pentagon = generatePolygonFoodClassDefinition(5, "lavender")

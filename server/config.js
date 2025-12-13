@@ -26,7 +26,7 @@ module.exports = {
 
             properties: { // This overrides settings in the config.js file, providing the selected gamemode doesn't also override it.
                 teams: 2,
-                bot_cap: 0,
+                bot_cap: 32,
             }
         },
     ],
@@ -65,9 +65,7 @@ module.exports = {
 
     // When an entity reaches a level, this function is called and returns how many skill points that entity gets for reaching that level.
     defineLevelSkillPoints: level => {
-        if (level < 2) return 0;
-        if (level <= 40) return 1;
-        if (level <= 45 && level & 1 === 1) return 1;
+        if (level <= 60 ) return 1;
         return 0;
     },
 
@@ -84,10 +82,18 @@ module.exports = {
     bot_start_level: 0, // How much XP bots will receive when first created.
     bot_skill_upgrade_chances: [1, 1, 3, 4, 4, 4, 4, 2, 1, 1], // The chances of a bot upgrading a specific skill when skill upgrades are available.
     bot_class_upgrade_chances: [1, 5, 20, 37, 37], // The chances of a bot upgrading a specific amount of times before it stops upgrading.
-    bot_name_prefix: "[AI] ", // This is prefixed before the bot's randomly chosen name.
+    bot_name_prefix: "(Bot) ", // This is prefixed before the bot's randomly chosen name.
+    use_advanced_bot_ai: true, // Use the advanced bot AI system  
+    bot_personality_weights: { // Probability of each personality  
+        AGGRESSIVE: 1,  
+        DEFENSIVE: 1,  
+        BALANCED: 2,  
+        CHAOTIC: 0.5,  
+        SNIPER: 1,  
+    },
 
     // The class that players and bots spawn as.
-    spawn_class: "single",
+    spawn_class: "tank",
 
     // How every entity regenerates their health.
     regenerate_tick: 100,
@@ -95,7 +101,7 @@ module.exports = {
     // Food
     food_types: [ // Possible food types outside the nest
         [1, [
-            [2048, "monogon"], [1024, "duogon"], [512, "triangle"], [256, "square"], [128, "pentagon"], [64, "hexagon"], [32, "heptagon"], [16, "octogon"], [8, "nonagon"], [4, "decagon"], [2, "hendecagon"], [1, "dodecagon"]
+            /*[2048, "monogon"], [1024, "duogon"],*/ [512, "triangle"], [256, "square"], [128, "pentagon"], [64, "hexagon"], [32, "heptagon"], [16, "octogon"], [8, "nonagon"], [4, "decagon"], [2, "hendecagon"], [1, "dodecagon"]
         ]],
     ],
     food_types_nest: [ // Possible food types in the nest

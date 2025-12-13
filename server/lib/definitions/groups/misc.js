@@ -5,10 +5,10 @@ require('./tanks.js')
 const g = require('../gunvals.js')
 
 // OBSTACLES
-Class.blocker = {
+Class.circleWall = {
     TYPE: "wall",
     DAMAGE_CLASS: 1,
-    LABEL: "Blocker",
+    LABEL: "Wall",
     FACING_TYPE: "turnWithSpeed",
     SHAPE: 0,
     CAN_GO_OUTSIDE_ROOM: true,
@@ -565,6 +565,16 @@ Class.bot = {
     CONTROLLERS: ["nearestDifferentMaster", "mapAltToFire", "minion", "fleeAtLowHealth", ["mapFireToAlt", { onlyIfHasAltFireGun: true }], ["wanderAroundMap", { immitatePlayerMovement: true, lookAtGoal: true }]],
     AI: { IGNORE_SHAPES: true },
 };
+Class.advancedBot = {
+    PARENT: "bot",  
+    CONTROLLERS: [  
+        "advancedBotAI",  
+        "mapAltToFire",   
+        ["mapFireToAlt", { onlyIfHasAltFireGun: true }]  
+    ],  
+    AI: { IGNORE_SHAPES: false },
+};
+
 
 // SCORE KEEPING
 Class.tagMode = {

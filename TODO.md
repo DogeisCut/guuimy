@@ -8,8 +8,11 @@
     - [ ] Tank
         - [X] Single
             - [ ] Double
-            - [ ] Stack
-                - Mini Streamliner
+                - [ ] Stack
+                    - Mini Streamliner
+            - [ ] Thumper
+                - Pounder
+            - [ ] Sniper
         - [ ] Blocker
             - Trapper
         - [ ] Commander

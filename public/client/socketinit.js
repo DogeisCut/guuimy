@@ -422,13 +422,13 @@ function Status() {
         },
         getState: () => statState,
         getFade: () => {
-            return (statState === 'dying' || statState === 'killed') ? 1 - Math.min(1, (getNow() - statTime) / 300) : 1;
+            return (statState === 'dying' || statState === 'killed') ? 1 - Math.min(1, (getNow() - statTime) / 200) : 1;
         },
         getColor: () => {
-            return '#FFFFFF';
+            return '#ffffff';
         },
         getBlend: () => {
-            let o = (statState === 'normal' || statState === 'dying') ? 0 : 1 - Math.min(1, (getNow() - statTime) / 80);
+            let o = (statState === 'normal' || statState === 'dying') ? 0 : 1 - Math.min(1, (getNow() - statTime) / 50);
             if (getNow() - statTime > 500 && statState === 'injured') {
                 statState = 'normal';
             }

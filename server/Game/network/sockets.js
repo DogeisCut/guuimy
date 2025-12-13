@@ -1131,8 +1131,8 @@ class socketManager {
             body.define(Config.spawn_class);
             /*if (Class.menu_tanks) {
                 let string = Class.menu_tanks.UPGRADES_TIER_0[0];
-                if (string !== "single") {
-                    Class.menu_addons.UPGRADES_TIER_0.push("single")
+                if (string !== "tank") {
+                    Class.menu_addons.UPGRADES_TIER_0.push("tank")
                 }
             }*/
             body.name = name;

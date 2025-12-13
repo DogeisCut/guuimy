@@ -92,7 +92,7 @@ exports.chooseChance = (...arg) => {
 }
 
 exports.nameLists = {
-    bots: ["Alice", "Bob", "Carmen", "David", "Edith", "Freddy", "Gustav", "Helga", "Janet", "Lorenzo", "Mary", "Nora", "Olivia", "Peter", "Queen", "Roger", "Suzanne", "Tommy", "Ursula", "Vincent", "Wilhelm", "Xerxes", "Yvonne", "Zachary", "Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu"],
+    bots: ["Bob", "DogeisCut", "Starmatrix_20", "Waffz_The_Pancake", ":3", "Gogux", "", "this game sucks", "gomeux", "diep", "arras", "scenexe", "Triangle", "This is the tale of...", "lol", "lmao", ":p", "❤❤❤", "how do i play", "SKIBIDI TOILET", ":D", "trapper main", "Vadisnotu", "Gravityuse", "Unknown", "team?", "spin to team", "D:", "OwO", "UwU", "furry", "play furgals", "pls spawn radiant", "qwerty", "killer", "tgiwjhrsegbnjekrbnghjkrdhnb", "9 + 10 = ?", "TANK ONLY", "King", "Protogen Lover", "BSOD", "lag", "im new", "TimmyGamer2006"],
     a: ["Archimedes", "Akilina", "Anastasios", "Athena", "Alkaios", "Amyntas", "Aniketos", "Artemis", "Anaxagoras", "Apollon"],
     castle: ["Berezhany", "Lutsk", "Dobromyl", "Akkerman", "Palanok", "Zolochiv", "Palanok", "Mangup", "Olseko", "Brody", "Isiaslav", "Kaffa", "Bilhorod"],
     legion: ["Vesta", "Juno", "Orcus", "Janus", "Minerva", "Ceres"]
