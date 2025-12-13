@@ -1222,13 +1222,162 @@ class io_scaleWithMaster extends IO {
 class io_advancedBotAI extends IO {  
     constructor(body, opts = {}) {  
         super(body);  
-        
+    
+
         const personalities = {  
 
         };  
 
         this.personality = opts.personality || ran.choose(Object.values(personalities));  
-    }  
+
+        class State {
+            constructor(stateMachine) {
+                this.stateMachine = stateMachine
+            }
+            loop() {}
+            exit() {}
+            enter() {}
+        }
+        class StateMachine {
+            constructor() {
+                this.states = {}
+                this.currentState = undefined
+            }
+            loop() {
+                if (this.currentState)
+                    return this.states[this.currentState].loop()
+                return {}
+            }
+            transition(to) {
+                if (!to) throw "Invalid State Transition!"
+                if (this.currentState === to) return
+                if (this.currentState) 
+                    this.states[this.currentState].exit()
+                this.currentState = to
+                if (this.currentState)
+                    this.states[this.currentState].enter()
+            }
+        }
+        // AI states!
+        class FarmingState extends State {
+            constructor(stateMachine, body) {
+                super(stateMachine)
+                this.body = body
+            }
+            //from nearestDifferentMaster (Modified for Advanced Bots)
+            validate(e, m, sqrRange) {
+                // e is the target entity
+                // m is myself
+                const myMaster = this.body.master.master;
+                const aiSettings = this.body.aiSettings;
+                const theirMaster = e.master.master;
+                if (e.health.amount <= 0) return false; // dont target things with 0 or less health (dont target dead things)
+                if (theirMaster.team === myMaster.team || theirMaster.team === TEAM_ROOM) return false; //Dont target my team or Room (walls)
+                if (theirMaster.ignoredByAi) return false; //If this thing does not want to be seen by me, then fine
+                if (e.bond) return false; // dont target tank turrets (auto turrets)
+                if (e.invuln || e.godmode || theirMaster.godmode || theirMaster.passive || myMaster.passive) return false; //dont target god mode
+                if (isNaN(e.dangerValue)) return false; // Dont target things with fucked Danger values
+                if (!(aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5)) return false; //Dont target arena closer or invisible things (arena closer scary :()
+                // Check if this thing is in range
+                if ((e.x - m.x) * (e.x - m.x) >= sqrRange) return false;
+                if ((e.y - m.y) * (e.y - m.y) >= sqrRange) return false;
+                return true;
+            }
+            loop() {
+                const maxTimeWasted = 12739 // Max time I should spend attacking a shape (dont waste time on big health shapes I cant kill)
+                const sqrRange = this.body.fov * this.body.fov;
+                const validCandidates = [];
+                for (const e of targetableEntities.values()) {
+                    if (this.validate(e, this.body, sqrRange)) {
+                        validCandidates.push(e);
+                    }
+                }
+                
+                const validFood = validCandidates.filter(entity=>{entity.type == "food"})
+                .filter(food=>util.getTimeToKill(this.body.defs[0], food, this.body.skill.rld)<maxTimeWasted)
+                .sort((a,b)=>{a.skill.score - b.skill.score})
+
+                if (validFood.length!=0) {
+                    const bestFood = validFood[0]
+                    const distanceToBestFoodSqr = (this.body.x - bestFood.x) * (this.body.x - bestFood.x)
+                    const minimumDistanceToFood = (bestFood.SIZE * 2 + 30)**2
+                    let goal = {
+                        x: bestFood.x,
+                        y: bestFood.y
+                    }
+                    if (distanceToBestFoodSqr<minimumDistanceToFood) {
+                        goal = {
+                            x: this.body.x,
+                            y: this.body.y
+                        }
+                    }
+                    
+
+                    return {
+                        target: {
+                            x:goal.x - this.body.x,
+                            y:goal.y - this.body.y
+                        },
+                        goal,
+                        main:true,
+                        alt:false,
+                        fire:false,
+                        power: 1
+                    }
+                }
+
+                return {
+                    goal: {
+                        x: this.body.x,
+                        y: this.body.y
+                    },
+                    main:false,
+                    alt:false,
+                    fire:false
+                }
+            }
+        }
+        this.stateMachine = new StateMachine()
+        this.stateMachine.states.farm = new FarmingState(this.stateMachine, this.body)
+        this.stateMachine.transition("farm")
+    } 
+    think() {
+        return this.stateMachine.loop()
+    }
+    buildList(range) {
+        const sqrRange = range * range;
+        const validCandidates = [];
+        for (const e of targetableEntities.values()) {
+            if (this.validate(e, this.body, sqrRange)) {
+                validCandidates.push(e);
+            }
+        }
+        if (!validCandidates.length) {
+            this.targetLock = undefined;
+            return [];
+        }
+        let mostDangerous = 0;
+        for (const e of validCandidates) {
+            mostDangerous = Math.max(e.dangerValue, mostDangerous);
+        }
+        let keepTarget = false;
+        const finalTargets = validCandidates.filter(e => {
+            if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
+                if (this.targetLock && e.id === this.targetLock.id) {
+                    keepTarget = true;
+                }
+                return true;
+            }
+            return false;
+        });
+        // Reset target if it's not in there
+        if (!keepTarget) {
+            this.targetLock = undefined;
+        }
+        return finalTargets;
+    }
+
+
 }  
 
 let ioTypes = {
