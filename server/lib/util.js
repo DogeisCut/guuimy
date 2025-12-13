@@ -234,7 +234,7 @@ exports.getClassDPS = (classDefinition, reloadSkillPoints = 1) => {
 }
 
 exports.getTimeToKill = (attackerClass, targetEntity, reloadSkillPoints = 1) => {  
-    const attackerDPS = getTankDPS(attackerClass, reloadSkillPoints);  
+    const attackerDPS = exports.getTankDPS(attackerClass, reloadSkillPoints);  
     if (attackerDPS <= 0) return Infinity;  
       
     const targetHealth = targetEntity.health.amount;  
