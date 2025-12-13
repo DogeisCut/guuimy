@@ -675,7 +675,7 @@ global.buildUpgradeTree = (startTank = 'tank') => {
         if (!tank) continue;  
 
         const upgrades = [];  
-        for (let tier = 0; tier <= 9; tier++) {  
+        for (let tier = 0; tier <= Config.tier_cap; tier++) {  
             const tierKey = `UPGRADES_TIER_${tier}`;  
             if (tank[tierKey]) {  
                 upgrades.push(...tank[tierKey]);  
