@@ -233,7 +233,7 @@ class gameHandler {
                 logs.physics.mark();
             }
 
-            if (instance.activation.active || instance.isPlayer) {
+            if (true/*instance.activation.active || instance.isPlayer*/) {
                 logs.entities.tally();
                 // Think about my actions.
                 logs.life.set();

@@ -1442,7 +1442,7 @@ class io_advancedBotAI extends IO {
         this.stateMachine.loop()
         this.avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass()
         this.compressMovementLikeWASD()
-        this.body.name = this.stateMachine.currentState
+        //this.body.name = this.stateMachine.currentState
         return this.io
     }
 
