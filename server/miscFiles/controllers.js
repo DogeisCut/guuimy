@@ -1230,7 +1230,7 @@ class ControllerState {
 class ControllerStateMachine {
     constructor(controller) {
         this.states = {}
-        this.currentState = undefined
+        this.currentState = undefined // DO NOT MODIFY THIS DIRECTLY, USE `transition()`
         this.controller = controller
     }
     loop() {
@@ -1238,13 +1238,14 @@ class ControllerStateMachine {
             this.states[this.currentState].loop()
     }
     transition(to) {
-        if (!to) throw "Invalid State Transition!"
+        if (typeof to !== "string") throw "Invalid state transition!"
+        const nextState = this.states[to]
+        if (!nextState) throw `State ${to} not found!`
         if (this.currentState === to) return
-        if (this.currentState) 
+        if (this.currentState)
             this.states[this.currentState].exit()
         this.currentState = to
-        if (this.currentState)
-            this.states[this.currentState].enter()
+        nextState.enter()
     }
 }
 class FarmingControllerState extends ControllerState {
@@ -1386,6 +1387,8 @@ class io_advancedBotAI extends IO {
 
     think() {
         this.stateMachine.loop()
+        this.avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass()
+        this.compressMovementLikeWASD()
         return this.io
     }
 
