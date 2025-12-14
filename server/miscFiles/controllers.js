@@ -1220,6 +1220,27 @@ class io_scaleWithMaster extends IO {
 // Everything below here is for advanced bot AI stuff
 // ##################################################
 
+/*
+better bot AI suggestions:
+- Bots sidestep unpredictably when firing at a player rather than orbiting. The distance they do this is calculated from their stats, body stats, and cannon stats.
+- Bots get as close as they can when firing at polygons (anything without cannons), they will start sidestepping when near enemy attacks/bullets.
+- Bots avoid bullets, drones, and traps. 
+- Bots pick a class first before choosing a build (or at least calculate the tank they are picking in advance). The build is influenced by the stats of the tank they chose. A few build "presets" also influence which stats are chosen most to upgrade. (Glass cannon, rammer, balanced, etc). Bots have a chance to follow the preset exactly
+- Bot movement is restricted to 45 degree angle movements (as if they were using movement keys.)
+- Bots may occasionally face their highest recoil barrels backwards to boost their movement when not being attacked.
+- (Would likely be rather difficult, unless some sort of "wall" grid is made) Bots navigate mazes better.
+- (Would likely be rather difficult, unless some sort of "wall" grid is made) Bots at low health retreat to spawn, hide behind rocks, or take cover behind walls.
+- Bots look around and shoot at shapes when headed to a certain location with no enemies or projectiles in sight, also recoil boosting.
+- Bots agro onto different entities based on damage taken rather than locking onto one specific one. Bots prioritize lower health players.
+- Bots look around realistically (perhaps a simulated "mouse cursor" for aiming). Bots do not instantly snap to their angle, and have a randomize accuracy (the simulated mouse cursor would glide to that position with velocity and accuracy determines how close to its target position it considers it to actually be aiming)
+- Some bots can visibly be seen ""clicking"" on upgrades as they turn around strangley after spawning.
+- Bots move around more realistically (Some players when headed to a specific point tend to hold a single movement key for long periods at a time, only occasionally hitting other ones to adjust to the axis of the desired goal, may need variants for best realism)
+- Bots have different personalities (which influences the chances of presets, tanks, and even build stats. as well as targeting aggression, health flee amount, delay for avoiding and fleeing, sidestepping/dodging skill and patterns, maze navigation, etc.)
+- Bots sometimes do silly things like staring at players or "dancing" (rare though.)
+- Bots have a short ""memory"" based on damage taken from a player, projectile type, who the player was, etc. which influences behaviors such as when to charge in, who to avoid, etc.
+- And based on personality, most of these behaviors can briefly randomly turn off to simulate mistakes or player quirks
+*/
+
 class ControllerState {
     constructor(stateMachine) {
         this.stateMachine = stateMachine
