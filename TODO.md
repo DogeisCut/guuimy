@@ -8,7 +8,7 @@
         - [X] Single
             - [X] Double
                 - [X] Stack
-            - [ ] Thumper
+            - [ ] Crusher
                 - Pounder
             - [ ] Sniper
         - [ ] Blocker

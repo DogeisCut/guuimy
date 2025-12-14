@@ -5,7 +5,6 @@ require('./generics.js');
 require('./tanks.js');
 require('./turrets.js');
 const { makeTurret, addDevAura } = require("../facilitators");
-
 Class.miniboss = {
     PARENT: "genericBoss",
     RENDER_ON_LEADERBOARD: true,
@@ -17,6 +16,7 @@ Class.ramMiniboss = {
     CONTROLLERS: ["nearestDifferentMaster", "canRepel", "mapTargetToGoal"],
 }
 
+/*
 Class.dogeiscutBody = {
     PARENT: "genericTank",
     COLOR: "grey",
@@ -317,3 +317,4 @@ Class.dogeiscutBoss = {
         },
     ]
 }
+*/

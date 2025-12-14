@@ -91,6 +91,15 @@ exports.chooseChance = (...arg) => {
     }
 }
 
+exports.randomCyclePools = Object.create(null)
+
+exports.chooseFromRandomCycle = (listKey, array) => {
+	if (!(listKey in exports.randomCyclePools) || exports.randomCyclePools[listKey].length === 0) {
+		exports.randomCyclePools[listKey] = exports.shuffle(array)
+	}
+	return exports.randomCyclePools[listKey].pop()
+}
+
 exports.nameLists = {
     bots: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
         "Bob", "i suck at this :(", "swear words", "DogeisCut", "Starmatrix_20", "Waffz_The_Pancake", ":3", "Gogux", "this game sucks", "gomeux", "diep", "arras", "scenexe", "Triangle", "This is the tale of...",
@@ -107,36 +116,36 @@ exports.nameLists = {
 }
 
 exports.chooseBotName = () => {
-	const chosenBotName = exports.choose(exports.nameLists.bots);
-	const randomCapitalizationRoll = Math.floor(Math.random() * 1000);
+	const chosenBotName = exports.chooseFromRandomCycle("bots", exports.nameLists.bots)
+	const randomCapitalizationRoll = Math.floor(Math.random() * 1000)
 
 	if (randomCapitalizationRoll < 20) {
 		return chosenBotName.split("").map(character => {
 			if (Math.random() < 0.5) {
-				return character.toUpperCase();
+				return character.toUpperCase()
 			}
-			return character.toLowerCase();
-		}).join("");
+			return character.toLowerCase()
+		}).join("")
 	}
 
 	if (randomCapitalizationRoll < 170) {
-		return chosenBotName.toLowerCase();
+		return chosenBotName.toLowerCase()
 	}
 
 	if (randomCapitalizationRoll < 320) {
-		return chosenBotName.toUpperCase();
+		return chosenBotName.toUpperCase()
 	}
 
 	if (randomCapitalizationRoll < 470) {
 		return chosenBotName.split(" ").map(word => {
 			if (word.length === 0) {
-				return word;
+				return word
 			}
-			return word[0].toUpperCase() + word.slice(1).toLowerCase();
-		}).join(" ");
+			return word[0].toUpperCase() + word.slice(1).toLowerCase()
+		}).join(" ")
 	}
 
-	return chosenBotName;
-};
+	return chosenBotName
+}
 
 exports.chooseBossName = (code, amount) => code in exports.nameLists ? exports.chooseN(exports.nameLists[code], amount) : []

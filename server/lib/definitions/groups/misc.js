@@ -254,59 +254,6 @@ Class.baseProtector = {
     ]
 };
 
-Class.mothership = {
-    PARENT: "genericTank",
-    LABEL: "Mothership",
-    NAME: "Mothership",
-    DANGER: 10,
-    SIZE: Class.genericTank.SIZE * (12 / 3),
-    SHAPE: 16,
-    STAT_NAMES: statnames.drone,
-    VALUE: 5e5,
-    SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    BODY: {
-        REGEN: 0.5,
-        FOV: 1,
-        
-        ACCEL: 0.2,
-        SPEED: 0.3,
-        HEALTH: 4000,
-        PUSHABILITY: 0.15,
-        DENSITY: 0.2,
-        DAMAGE: 1.5,
-    },
-    HITS_OWN_TYPE: "pushOnlyTeam",
-    GUNS: 
-    weaponArray([
-        {
-            POSITION: [4.3, 3.1, 1.2, 8, 0, 22.5, 0],
-            PROPERTIES: {
-                MAX_CHILDREN: 2,
-                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
-                TYPE: "drone",
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: "drone",
-                WAIT_TO_CYCLE: true,
-            }
-        }, {
-            POSITION: [4.3, 3.1, 1.2, 8, 0, 45, 1/32],
-            PROPERTIES: {
-                MAX_CHILDREN: 2,
-                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
-                TYPE: ["drone", {
-                        AI: {skynet: true},
-                        INDEPENDENT: true,
-                        BODY: {FOV: 2},
-                    }],
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: "drone",
-                WAIT_TO_CYCLE: true,
-            }
-        }
-    ], 8, 1/16)
-}
 Class.arenaCloser = {
     PARENT: "genericTank",
     LABEL: "Arena Closer",
