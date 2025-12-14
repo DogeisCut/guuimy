@@ -1216,6 +1216,9 @@ class io_scaleWithMaster extends IO {
         }
     }
 }
+// ##################################################
+// Everything below here is for advanced bot AI stuff
+// ##################################################
 
 class ControllerState {
     constructor(stateMachine) {
@@ -1248,6 +1251,7 @@ class ControllerStateMachine {
         nextState.enter()
     }
 }
+
 class FarmingControllerState extends ControllerState {
     // TODO:
     // - sweep behavior
@@ -1266,25 +1270,31 @@ class FarmingControllerState extends ControllerState {
                 x: this.body.x,
                 y: this.body.y
             },
-            target: {
-                x: 0,
-                y: 0
-            },
             main: false,
             alt: false,
             fire: false,
             power: 0,
         }
 
-        const maxTimeWasted = 20 // Max time I should spend attacking a shape (dont waste time on big health shapes I cant kill)
+        const maxTimeWasted = 20*this.controller.personality.patience*this.controller.personality.determination // Max time I should spend attacking a shape (dont waste time on big health shapes I cant kill, more patient bots)
         const sqrRange = this.body.fov * this.body.fov;
-        const validCandidates = [];
+        const validCandidates = []
+        
         for (const e of targetableEntities.values()) {
-            if (io_advancedBotAI.validate(e, this.body, sqrRange)) {
+            if (io_advancedBotAI.validate(e, this.body, sqrRange, false)) {
                 validCandidates.push(e);
             }
         }
         
+
+        const nearbyTanks = validCandidates.filter(entity=>entity.type == "tank") // check for tank colon three
+        .filter(entity=>(entity.x - this.body.x)**2+(entity.y - this.body.y)**2>100*this.controller.personality.solitary) //Check if there are too many people nearby
+        if (nearbyTanks.length>3) {
+            this.stateMachine.transition("wander")
+            this.stateMachine.states["wander"].timer = 300*this.controller.personality.solitary // How long we should wander for at most
+            this.stateMachine.states["wander"].backState = "farm"
+        }
+
         const validFood = validCandidates/* I just want to note that its funny to remove this filter and watch the bots try to farm enemy bots */.filter(entity=>entity.type == "food")/**/
         .filter(food=>util.getTimeToKill(this.body, food)<maxTimeWasted)
         .sort((a,b)=>{   
@@ -1314,10 +1324,42 @@ class FarmingControllerState extends ControllerState {
                 }
                 this.controller.io.power = 1
             }
+            
+        } else {
+            this.stateMachine.transition("wander")
+            this.stateMachine.states["wander"].timer = 100
+            this.stateMachine.states["wander"].backState = "farm"
         }
     }
 }
-  
+
+class WanderControllerState extends ControllerState {
+    //If there is nothing to do, wander towards the center of the stage
+    constructor(stateMachine) {
+        super(stateMachine)
+        this.centerRadius = Math.min(global.gameManager.room.width,global.gameManager.room.height)
+        this.goalCord = {}
+    }
+    enter() {
+        this.goalCord.x = gameManager.room.center.x + ran.irandomRange(this.centerRadius*-1,this.centerRadius)
+        this.goalCord.y = gameManager.room.center.y + ran.irandomRange(this.centerRadius*-1,this.centerRadius)
+    }
+    loop() {
+        this.timer--
+        const sqrRange = this.body.fov * this.body.fov;
+        this.controller.io = {
+            goal: {
+                x: this.goalCord.x,
+                y: this.goalCord.y
+            }
+        }
+        if (this.timer<0 || ((this.body.x - this.goalCord.x)**2 + (this.body.y - this.goalCord.y)**2 < 1)) {
+            this.stateMachine.transition(this.backState)
+        }
+    }
+}
+
+//The controller
 class io_advancedBotAI extends IO {  
     constructor(body, opts = {}) {  
         super(body);  
@@ -1332,7 +1374,11 @@ class io_advancedBotAI extends IO {
     
 
         const personalities = {  
-
+            generalist: {
+                patience: 1,
+                determination: 1,
+                solitary: 1
+            }
         };  
 
         this.personality = opts.personality || ran.choose(Object.values(personalities));  
@@ -1353,8 +1399,11 @@ class io_advancedBotAI extends IO {
         }
     
         this.stateMachine = new ControllerStateMachine(this)
+
         this.stateMachine.states.farm = new FarmingControllerState(this.stateMachine)
         this.stateMachine.transition("farm")
+
+        this.stateMachine.states.wander = new WanderControllerState(this.stateMachine)
     } 
 
     /* HELPER FUNCTIONS: intended to be used within states */
@@ -1366,7 +1415,7 @@ class io_advancedBotAI extends IO {
         // For best results it may be worth randomly disabling one of the movement keys when the bot is moving diagonally. and how this is done and chosen is based on personality
     }
     //from nearestDifferentMaster (Modified for Advanced Bots)
-    static validate(e, m, sqrRange) {
+    static validate(e, m, sqrRange, filterTeam=true) {
         const xRange = sqrRange;  
         const yRange = sqrRange * (9/16) * (9/16) // Simulate the screens of a player.
         // e is the target entity
@@ -1375,7 +1424,9 @@ class io_advancedBotAI extends IO {
         const aiSettings = m.aiSettings;
         const theirMaster = e.master.master;
         if (e.health.amount <= 0) return false; // dont target things with 0 or less health (dont target dead things)
-        if (theirMaster.team === myMaster.team || theirMaster.team === TEAM_ROOM) return false; //Dont target my team or Room (walls)
+        if (filterTeam) //Should we filter out our own team members?
+            if (theirMaster.team === myMaster.team) return false; //Dont target my team
+        if (theirMaster.team === TEAM_ROOM) return false // Dont target the room (Walls)
         if (theirMaster.ignoredByAi) return false; //If this thing does not want to be seen by me, then fine
         if (e.bond) return false; // dont target tank turrets (auto turrets)
         if (e.invuln || e.godmode || theirMaster.godmode || theirMaster.passive || myMaster.passive) return false; //dont target god mode
@@ -1391,10 +1442,14 @@ class io_advancedBotAI extends IO {
         this.stateMachine.loop()
         this.avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass()
         this.compressMovementLikeWASD()
+        this.body.name = this.stateMachine.currentState
         return this.io
     }
 
 }  
+// ##############################################
+// AI bot stuff ends here
+// ##############################################
 
 let ioTypes = {
     //misc
