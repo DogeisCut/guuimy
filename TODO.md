@@ -27,6 +27,8 @@
     - [ ] Change level caculation to be more gradual.\
     - [ ] Merge bullet health and penetration into just bullet penetration.
     - [ ] Shared XP for kills like scenexe (could give percentage notification)
+    - [ ] Upgrade Queueing (like diep)
+        - I want to implement a server and client-side feature where players can hold `,` and press a skill number or click it to queue up skill points to automatically invest when you have points. There would be a config value for maximum queued skill points. Holding `M` would do the same thing but queue up to fill an entire skill bar. Holding either `,` or `M` will make the skill bars show themselves as if you were hovering over them. Entities store a 1 dimensional "skill queue" where the indexes or names of all the skills are stored in order of addition, the client can read its own skill queue so it can render it, but the server does all the processing. This system would ideally replace the way clients upgrade stats currently, instead interfacing with the queue to upgrade rather than always directly upgrading stats
 - [ ] **Polygons**
     - [ ] Decide on final polygon layout/score/health/etc
         - not sure about the duogons and monogons, at least having them be so beefy
