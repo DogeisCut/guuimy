@@ -37,6 +37,7 @@
     - [ ] Radiance
         - [ ] Client rendering
         - [ ] Server
+- [ ] **Bots**
 - [ ] **Visuals and UI**
     - [X] Border Width
     - [X] Upgrades
