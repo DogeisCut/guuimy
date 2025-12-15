@@ -1533,6 +1533,16 @@ class io_pathfinding extends IO {
     }  
       
     think(input) {  
+        const doNothing = {
+            goal: {
+                x: this.body.x,
+                y: this.body.y
+            },
+            main: false,
+            alt: false,
+            fire: false,
+            power: 0,
+        }
         this.grid.updateGrid(this.body)
         const startGridX = ((this.body.x / this.grid.cellSize) | 0) + this.grid.halfWidth;
 		const startGridY = ((this.body.y / this.grid.cellSize) | 0) + this.grid.halfHeight;
@@ -1588,18 +1598,18 @@ class io_pathfinding extends IO {
 
 		const dx = this.body.x - worldX;
 		const dy = this.body.y - worldY;
-		const arrivalRadius = this.grid.cellSize * 0.8;
+		const arrivalRadius = this.grid.cellSize * 1.2;
 
 		const waypointIndex = waypoint[1] * this.grid.width + waypoint[0];
 
 		if (this.grid.grid[waypointIndex]) {
 			this.currentTargetIndex++;
-			return {};
+			return doNothing;
 		}
 
 		if ((dx * dx + dy * dy) <= arrivalRadius * arrivalRadius) {
 			this.currentTargetIndex++;
-			return {};
+			return doNothing;
 		}
 
 		if (this.currentTargetIndex + 1 < this.currentPath.length) {
@@ -1612,7 +1622,7 @@ class io_pathfinding extends IO {
 
 			if (ndx * ndx + ndy * ndy < dx * dx + dy * dy) {
 				this.currentTargetIndex++;
-				return {};
+				return doNothing;
 			}
 		}
 
