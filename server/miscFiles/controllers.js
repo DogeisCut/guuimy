@@ -1281,7 +1281,8 @@ class PathfindingGrid {
             this.markEntityAsObstacle(entity, body);  
         }  
     }  
-      
+    
+    // entities have a gradient of undesireableness around them to discourage skimming.
     markEntityAsObstacle(entity, us) {
         const halfSize = entity.realSize + us.realSize
         const sizeCells = Math.ceil(halfSize / this.cellSize)
@@ -1305,6 +1306,7 @@ class PathfindingGrid {
                 if (dist <= halfSize) {
                     const t = 1 - dist / halfSize
                     const basePenalty = 15
+                    // you can adjust that grid here, change the power for a sharper gradient, and change the multiplier for radius
                     const penalty = Math.min(255, basePenalty + Math.pow(t, 4) * 700 | 0)
                     const index = y * this.width + x
                     if (penalty > this.grid[index]) {
@@ -1315,6 +1317,7 @@ class PathfindingGrid {
         }
     }
 }
+// FOR WAFFZ: if you're wondering wtf a minheap is, it's basically a special bag of numbers where the smallest value is easiest to grab. It isnt sorted.
 class MinHeap {
     constructor(scoreArray) {
         this.items = []
