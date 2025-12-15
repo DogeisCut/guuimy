@@ -1242,6 +1242,7 @@ better bot AI suggestions:
 */
 
 // TODO: give bots a jolt or smth if they are too close to the same area for a bit while trying to follow a path
+// TODO: give walls and circular entities different handling in the cell grid (rn everything is treated as square)
 class PathfindingGrid {  
     constructor(room, cellSize = 60) {  
         this.cellSize = cellSize;  
