@@ -1261,7 +1261,7 @@ class PathfindingGrid {
         this.grid.fill(0)
     }
       
-    updateGrid(body, ignore) {  
+    updateGrid(body) {  
         const now = Date.now();  
         if (now - this.lastUpdate < 500) return;  
         this.lastUpdate = now;  
@@ -1273,15 +1273,14 @@ class PathfindingGrid {
         }  
           
         for (const entity of global.entities.values()) {  
-            if ((ignore && entity.id === ignore.id) ||
-                entity.team === body.team ||   
+            if (entity.team === body.team ||   
                 entity.health.amount <= 0 ||   
                 entity.bond ||  
                 entity.master.team === body.master.team) {  
                 continue;  
             }  
               
-            this.markEntityAsObstacle(entity, body, ignore);  
+            this.markEntityAsObstacle(entity, body);  
         }  
     }  
       
@@ -1488,7 +1487,6 @@ class AStarPathfinder {
 	}
 }
 
-// ISSUE: pathfinding doesnt like to work when the target is inside an obsticle, and since polygons are obsticles it sometimes causes issues
 class io_pathfinding extends IO {  
     constructor(body, opts = {}) {  
         super(body);  
@@ -1501,89 +1499,91 @@ class io_pathfinding extends IO {
     }  
       
     think(input) {  
-        function getEntitiesAtPosition(x, y, radius = null) {  
-            let results = [];  
-            for (const entity of entities.values()) {  
-                let dx = entity.x - x;  
-                let dy = entity.y - y;  
-                let distSq = dx * dx + dy * dy;  
-                let thresholdSq = (radius || entity.size) ** 2;  
-                if (distSq <= thresholdSq) {  
-                    results.push(entity);  
-                }  
-            }  
-            return results;  
-        }
-        this.grid.updateGrid(this.body, getEntitiesAtPosition(input.goal.x, input.goal.y, 5)[0])
-        if (!input.goal) return {};  
-          
-        const startGridX = ((this.body.x / this.grid.cellSize) | 0) + this.grid.halfWidth
-		const startGridY = ((this.body.y / this.grid.cellSize) | 0) + this.grid.halfHeight
-		const goalGridX = ((input.goal.x / this.grid.cellSize) | 0) + this.grid.halfWidth
-        const goalGridY = ((input.goal.y / this.grid.cellSize) | 0) + this.grid.halfHeight
-        
-        this.recalculateCooldown--
+        this.grid.updateGrid(this.body)
+        const startGridX = ((this.body.x / this.grid.cellSize) | 0) + this.grid.halfWidth;
+		const startGridY = ((this.body.y / this.grid.cellSize) | 0) + this.grid.halfHeight;
+		const rawGoalGridX = ((input.goal.x / this.grid.cellSize) | 0) + this.grid.halfWidth;
+		const rawGoalGridY = ((input.goal.y / this.grid.cellSize) | 0) + this.grid.halfHeight;
+
+		const width = this.grid.width;
+		const height = this.grid.height;
+		const gridArray = this.grid.grid;
+
+		const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+		const findNearestFreeCell = (originX, originY, maxSearchRadiusCells = 6) => {
+			const ox = clamp(originX, 0, width - 1);
+			const oy = clamp(originY, 0, height - 1);
+			if (!gridArray[oy * width + ox]) return { x: ox, y: oy };
+
+			for (let radius = 1; radius <= maxSearchRadiusCells; radius++) {
+				// iterate the ring; prefer closer cells by checking ring rows/columns
+				for (let dx = -radius; dx <= radius; dx++) {
+					for (let dy = -radius; dy <= radius; dy++) {
+						if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue; // only ring
+						const nx = ox + dx;
+						const ny = oy + dy;
+						if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+						if (!gridArray[ny * width + nx]) return { x: nx, y: ny };
+					}
+				}
+			}
+			// fallback to original clamped cell if none found
+			return { x: ox, y: oy };
+		};
+
+		const goalCell = findNearestFreeCell(rawGoalGridX, rawGoalGridY, 8);
+
+		this.recalculateCooldown--;
 		if (this.recalculateCooldown <= 0 || this.currentTargetIndex >= this.currentPath.length) {
 			this.currentPath = this.pathfinder.findPath(
 				startGridX,
 				startGridY,
-				goalGridX,
-				goalGridY
-			)
-			this.currentTargetIndex = 0
-			this.recalculateCooldown = this.recalculateCooldownMax
+				goalCell.x,
+				goalCell.y
+			);
+			this.currentTargetIndex = 0;
+			this.recalculateCooldown = this.recalculateCooldownMax;
 		}
 
-		if (this.currentPath.length === 0) return {}
+		if (this.currentPath.length === 0) return {};
 
-		const waypoint = this.currentPath[this.currentTargetIndex]
-		const worldX =
-            (waypoint[0] - this.grid.halfWidth) * this.grid.cellSize +
-            this.grid.cellSize * 0.5
+		const waypoint = this.currentPath[this.currentTargetIndex];
+		const worldX = (waypoint[0] - this.grid.halfWidth) * this.grid.cellSize + this.grid.cellSize * 0.5;
+		const worldY = (waypoint[1] - this.grid.halfHeight) * this.grid.cellSize + this.grid.cellSize * 0.5;
 
-        const worldY =
-            (waypoint[1] - this.grid.halfHeight) * this.grid.cellSize +
-            this.grid.cellSize * 0.5
+		const dx = this.body.x - worldX;
+		const dy = this.body.y - worldY;
+		const arrivalRadius = this.grid.cellSize * 0.8;
 
-		const dx = this.body.x - worldX
-		const dy = this.body.y - worldY
-		const arrivalRadius =
-        this.grid.cellSize * 0.8
-        
-        const waypointIndex =
-            waypoint[1] * this.grid.width + waypoint[0]
+		const waypointIndex = waypoint[1] * this.grid.width + waypoint[0];
 
-        if (this.grid.grid[waypointIndex]) {
-            this.currentTargetIndex++
-            return {}
-        }
+		if (this.grid.grid[waypointIndex]) {
+			this.currentTargetIndex++;
+			return {};
+		}
 
-        if ((dx * dx + dy * dy) <= arrivalRadius * arrivalRadius) {
-            this.currentTargetIndex++
-            return {}
-        }
+		if ((dx * dx + dy * dy) <= arrivalRadius * arrivalRadius) {
+			this.currentTargetIndex++;
+			return {};
+		}
 
-        if (this.currentTargetIndex + 1 < this.currentPath.length) {
-            const next = this.currentPath[this.currentTargetIndex + 1]
-            const nextWorldX =
-                (next[0] - this.grid.halfWidth) * this.grid.cellSize +
-                this.grid.cellSize * 0.5
-            const nextWorldY =
-                (next[1] - this.grid.halfHeight) * this.grid.cellSize +
-                this.grid.cellSize * 0.5
+		if (this.currentTargetIndex + 1 < this.currentPath.length) {
+			const next = this.currentPath[this.currentTargetIndex + 1];
+			const nextWorldX = (next[0] - this.grid.halfWidth) * this.grid.cellSize + this.grid.cellSize * 0.5;
+			const nextWorldY = (next[1] - this.grid.halfHeight) * this.grid.cellSize + this.grid.cellSize * 0.5;
 
-            const ndx = this.body.x - nextWorldX
-            const ndy = this.body.y - nextWorldY
+			const ndx = this.body.x - nextWorldX;
+			const ndy = this.body.y - nextWorldY;
 
-            if (ndx * ndx + ndy * ndy <
-                dx * dx + dy * dy) {
-                this.currentTargetIndex++
-                return {}
-            }
-        }
+			if (ndx * ndx + ndy * ndy < dx * dx + dy * dy) {
+				this.currentTargetIndex++;
+				return {};
+			}
+		}
 
-		return { goal: { x: worldX, y: worldY } }
-    }  
+		return { goal: { x: worldX, y: worldY } };
+	}
 }
 
 
