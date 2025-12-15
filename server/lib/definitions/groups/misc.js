@@ -516,6 +516,7 @@ Class.advancedBot = {
     PARENT: "bot",  
     CONTROLLERS: [  
         "advancedBotAI",  
+        "pathfinding",
         "mapAltToFire",   
         ["mapFireToAlt", { onlyIfHasAltFireGun: true }]  
     ],  

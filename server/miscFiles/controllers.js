@@ -1241,9 +1241,334 @@ better bot AI suggestions:
 - And based on personality, most of these behaviors can briefly randomly turn off to simulate mistakes or player quirks
 */
 
-// You know, it'd be really cool to implement "A* pathfinding", and store an array of list of goal locations.
-// We'd get more natrual movement that way and it'd be easier to make them avoid shapes n stuff
-// Problem is ive never implemented such an algorithm before, we'd need to make some sort of internal grid for bots
+// This pathfinding is cool n all but its laggy as hell, and super inaccurate.
+// TODO: look further into this. Im thinking having some sort of grid all entities share or individual entities have grids that only cover thier FOV
+class PathfindingGrid {  
+    constructor(room, cellSize = 50) {  
+        this.cellSize = cellSize;  
+        this.width = Math.ceil(room.width / cellSize);  
+        this.height = Math.ceil(room.height / cellSize);  
+        this.halfWidth = (this.width / 2) | 0
+        this.halfHeight = (this.height / 2) | 0
+        this.cellCount = this.width * this.height
+        this.grid = new Uint8Array(this.cellCount)  
+        this.lastUpdate = 0;  
+    }  
+
+    clearGrid() {
+        this.grid.fill(0)
+    }
+      
+    updateGrid(body) {  
+        const now = Date.now();  
+        if (now - this.lastUpdate < 500) return;  
+        this.lastUpdate = now;  
+          
+        this.clearGrid()
+          
+        for (let wall of global.walls) {  
+            this.markEntityAsObstacle(wall, body);  
+        }  
+          
+        for (const entity of global.entities.values()) {  
+            if (entity.team === body.team ||   
+                entity.health.amount <= 0 ||   
+                entity.bond ||  
+                entity.master.team === body.master.team) {  
+                continue;  
+            }  
+              
+            this.markEntityAsObstacle(entity, body);  
+        }  
+    }  
+      
+    markEntityAsObstacle(entity, us) {  
+        const halfSize = entity.realSize + us.realSize + 20
+        const sizeCells = Math.ceil(halfSize / this.cellSize) + 1
+        
+        const centerGridX = ((entity.x / this.cellSize) | 0) + this.halfWidth  
+        const centerGridY = ((entity.y / this.cellSize) | 0) + this.halfHeight  
+    
+        const startX = Math.max(0, centerGridX - sizeCells)  
+        const endX = Math.min(this.width - 1, centerGridX + sizeCells) 
+        const startY = Math.max(0, centerGridY - sizeCells)  
+        const endY = Math.min(this.height - 1, centerGridY + sizeCells) 
+          
+        for (let y = startY; y <= endY; y++) {  
+            const worldY = (y - this.halfHeight) * this.cellSize + this.cellSize * 0.5
+            for (let x = startX; x <= endX; x++) {  
+                const worldX = (x - this.halfWidth) * this.cellSize + this.cellSize * 0.5
+                if (Math.abs(worldX - entity.x) <= halfSize &&   
+                    Math.abs(worldY - entity.y) <= halfSize) {  
+                    this.grid[y * this.width + x] = 1  
+                }
+            }  
+        }  
+    }  
+}
+class MinHeap {
+    constructor(scoreArray) {
+        this.items = []
+        this.scoreArray = scoreArray
+    }
+
+    push(nodeIndex) {
+        const items = this.items
+        items.push(nodeIndex)
+        if (this.items.length > 5000) { // ugly code but i'd prefer the server to NOT crash!
+            this.items.length = 0
+        }
+        let i = items.length - 1
+
+        while (i > 0) {
+            const parentIndex = ((i - 1) / 2) | 0
+            if (this.scoreArray[items[parentIndex]] <= this.scoreArray[nodeIndex]) break
+            items[i] = items[parentIndex]
+            i = parentIndex
+        }
+
+        items[i] = nodeIndex
+    }
+
+    pop() {
+        const items = this.items
+		const root = items[0]
+		const last = items.pop()
+
+		if (items.length > 0) {
+			let i = 0
+			const length = items.length
+
+			while (true) {
+				let left = i * 2 + 1
+				let right = left + 1
+				if (left >= length) break
+
+				let smallest = right < length &&
+					this.scoreArray[items[right]] < this.scoreArray[items[left]]
+					? right
+					: left
+
+				if (this.scoreArray[last] <= this.scoreArray[items[smallest]]) break
+
+				items[i] = items[smallest]
+				i = smallest
+			}
+
+			items[i] = last
+		}
+
+		return root
+	}
+
+	get size() {
+		return this.items.length
+	}
+}
+class AStarPathfinder {  
+    constructor(gridObject) {  
+        this.gridObject = gridObject
+        const cellCount = gridObject.cellCount
+
+        this.gScore = new Float32Array(cellCount)
+        this.fScore = new Float32Array(cellCount)
+        this.cameFrom = new Int32Array(cellCount)
+        this.closed = new Uint8Array(cellCount)
+
+        this.openHeap = new MinHeap(this.fScore)
+        this.heuristicWeight = 1.1
+    }  
+      
+    findPath(startX, startY, endX, endY) {  
+        let expansions = 0
+        const maxExpansions = 6000
+        
+        const width = this.gridObject.width
+        const grid = this.gridObject.grid
+        const cellCount = this.gridObject.cellCount
+
+        const startIndex = startY * width + startX
+        const endIndex = endY * width + endX
+
+        this.closed.fill(0)
+        this.openHeap.items.length = 0
+
+        for (let i = 0; i < cellCount; i++) {
+            this.gScore[i] = Infinity
+            this.fScore[i] = Infinity
+            this.cameFrom[i] = -1
+        }
+
+        this.gScore[startIndex] = 0
+		this.fScore[startIndex] = this.heuristic(startX, startY, endX, endY)
+		this.openHeap.push(startIndex)
+
+		while (this.openHeap.size > 0) {
+            const current = this.openHeap.pop()
+            if (++expansions > maxExpansions) {
+                break
+            }
+			if (current === endIndex) {
+				return this.reconstructPath(current, width)
+			}
+
+			this.closed[current] = 1
+
+			const cx = current % width
+			const cy = (current / width) | 0
+
+			for (let neighbor of this.getNeighbors(cx, cy)) {
+				if (this.closed[neighbor]) continue
+
+                const obstaclePenalty = grid[neighbor] ? 50 : 0 // obstacles arent treated as hard blockers since stuff in this game is soft or can be killed.
+
+				const nx = neighbor % width
+				const ny = (neighbor / width) | 0
+                const diagonal = cx !== nx && cy !== ny
+
+                if (diagonal) { // prevent squeezing through blocked corners
+                    const cellHorizontal = cy * width + nx
+                    const cellVertical = ny * width + cx
+                    if (grid[cellHorizontal] || grid[cellVertical]) continue
+                }
+
+				const cost = diagonal ? Math.SQRT2 : 1
+
+				const tentativeGScore = this.gScore[current] + cost + obstaclePenalty
+				if (tentativeGScore >= this.gScore[neighbor]) continue
+
+				this.cameFrom[neighbor] = current
+				this.gScore[neighbor] = tentativeGScore
+				this.fScore[neighbor] = tentativeGScore + this.heuristic(nx, ny, endX, endY) * this.heuristicWeight
+				this.openHeap.push(neighbor)
+			}
+		}
+
+		return []
+    }  
+      
+    heuristic(x1, y1, x2, y2) {
+		const dx = Math.abs(x1 - x2)
+		const dy = Math.abs(y1 - y2)
+		return dx + dy + (Math.SQRT2 - 2) * Math.min(dx, dy)
+	}
+      
+    getNeighbors(x, y) {
+		const neighbors = []
+		const width = this.gridObject.width
+		const height = this.gridObject.height
+
+		for (let dy = -1; dy <= 1; dy++) {
+			for (let dx = -1; dx <= 1; dx++) {
+				if (dx === 0 && dy === 0) continue
+				const nx = x + dx
+				const ny = y + dy
+				if (nx >= 0 && ny >= 0 && nx < width && ny < height) {
+					neighbors.push(ny * width + nx)
+				}
+			}
+		}
+
+		return neighbors
+	}
+      
+    reconstructPath(current, width) {
+		const path = []
+		while (current !== -1) {
+			path.push([current % width, (current / width) | 0])
+			current = this.cameFrom[current]
+        }
+        if (path.length > 512) {
+            path.length = 512
+        }
+		return path.reverse()
+	}
+}
+// ISSUE: pathfinding doesnt like to work when the target is inside an obsticle, and since polygons are obsticles it sometimes causes issues
+class io_pathfinding extends IO {  
+    constructor(body, opts = {}) {  
+        super(body);  
+        this.grid = new PathfindingGrid(global.gameManager.room, opts.cellSize);  
+        this.pathfinder = new AStarPathfinder(this.grid);  
+        this.currentPath = [];  
+        this.currentTargetIndex = 0;  
+        this.recalculateCooldownMax = 5
+        this.recalculateCooldown = (body.id || 0) % this.recalculateCooldownMax
+    }  
+      
+    think(input) {  
+        this.grid.updateGrid(this.body)
+        if (!input.goal) return {};  
+          
+        const startGridX = ((this.body.x / this.grid.cellSize) | 0) + this.grid.halfWidth
+		const startGridY = ((this.body.y / this.grid.cellSize) | 0) + this.grid.halfHeight
+		const goalGridX = ((input.goal.x / this.grid.cellSize) | 0) + this.grid.halfWidth
+        const goalGridY = ((input.goal.y / this.grid.cellSize) | 0) + this.grid.halfHeight
+        
+        this.recalculateCooldown--
+		if (this.recalculateCooldown <= 0 || this.currentTargetIndex >= this.currentPath.length) {
+			this.currentPath = this.pathfinder.findPath(
+				startGridX,
+				startGridY,
+				goalGridX,
+				goalGridY
+			)
+			this.currentTargetIndex = 0
+			this.recalculateCooldown = this.recalculateCooldownMax
+		}
+
+		if (this.currentPath.length === 0) return {}
+
+		const waypoint = this.currentPath[this.currentTargetIndex]
+		const worldX =
+            (waypoint[0] - this.grid.halfWidth) * this.grid.cellSize +
+            this.grid.cellSize * 0.5
+
+        const worldY =
+            (waypoint[1] - this.grid.halfHeight) * this.grid.cellSize +
+            this.grid.cellSize * 0.5
+
+		const dx = this.body.x - worldX
+		const dy = this.body.y - worldY
+		const arrivalRadius =
+        this.grid.cellSize * 0.8
+        
+        const waypointIndex =
+            waypoint[1] * this.grid.width + waypoint[0]
+
+        if (this.grid.grid[waypointIndex]) {
+            this.currentTargetIndex++
+            return {}
+        }
+
+        if ((dx * dx + dy * dy) <= arrivalRadius * arrivalRadius) {
+            this.currentTargetIndex++
+            return {}
+        }
+
+        if (this.currentTargetIndex + 1 < this.currentPath.length) {
+            const next = this.currentPath[this.currentTargetIndex + 1]
+            const nextWorldX =
+                (next[0] - this.grid.halfWidth) * this.grid.cellSize +
+                this.grid.cellSize * 0.5
+            const nextWorldY =
+                (next[1] - this.grid.halfHeight) * this.grid.cellSize +
+                this.grid.cellSize * 0.5
+
+            const ndx = this.body.x - nextWorldX
+            const ndy = this.body.y - nextWorldY
+
+            if (ndx * ndx + ndy * ndy <
+                dx * dx + dy * dy) {
+                this.currentTargetIndex++
+                return {}
+            }
+        }
+
+		return { goal: { x: worldX, y: worldY } }
+    }  
+}
+
 
 class ControllerState {
     constructor(stateMachine) {
@@ -1328,6 +1653,8 @@ class FarmingControllerState extends ControllerState {
             
         // I dont think util.getTimeToKill should be trusted this way, as its very inaccurate
         // Instead of outright filtering shapes (aside from rediciously long ones) we should apply a penalty for the scoring too. 
+        
+        // TODO: filter out shapes bots cant reach/pathfind to
         .filter(food => util.getTimeToKill(this.body, food) < maxTimeWasted)
         .sort((a,b)=>{   
             const distA = (this.body.x - a.x) ** 2 + (this.body.y - a.y) ** 2;  
@@ -1442,13 +1769,14 @@ class io_advancedBotAI extends IO {
     } 
 
     /* HELPER FUNCTIONS: intended to be used within or after states */
-    avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass() {
+    //obsolete due to new pathfinding code!
+    /*avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass() {
         // Bots will move a slightly different direction until their movement path doesnt intersect with something damaging... like shapes...
     }
     compressMovementLikeWASD() {
         // Unfortunetly not as simple as just snapping movements to angles of 45 degrees, as they will alternate keys and it will end up looking the same.
         // For best results it may be worth randomly disabling one of the movement keys when the bot is moving diagonally. and how this is done and chosen is based on personality
-    }
+    }*/
     //from nearestDifferentMaster (Modified for Advanced Bots)
     static validate(e, m, sqrRange, filterTeam=true) {
         const xRange = sqrRange;  
@@ -1475,9 +1803,9 @@ class io_advancedBotAI extends IO {
 
     think() {
         this.stateMachine.loop()
-        this.avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass()
-        this.compressMovementLikeWASD()
-        //this.body.name = this.stateMachine.currentState
+        //this.avoidRammingIntoStuffLikeShapesWhileMovingAsToNotBeADumbass()
+        //this.compressMovementLikeWASD()
+        this.body.name = this.stateMachine.currentState
         return this.io
     }
 
@@ -1525,6 +1853,7 @@ let ioTypes = {
 
     //bots
     advancedBotAI: io_advancedBotAI,
+    pathfinding: io_pathfinding
 };
 
 module.exports = { ioTypes, IO };
