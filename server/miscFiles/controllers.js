@@ -1306,7 +1306,7 @@ class PathfindingGrid {
 
                 if (dist <= halfSize) {
                     const t = 1 - dist / halfSize
-                    const penalty = Math.min(255, (t * t) * 200 | 0)
+                    const penalty = Math.min(255, (t * t * t *t) * 300 | 0)
                     const index = y * this.width + x
                     if (penalty > this.grid[index]) {
                         this.grid[index] = penalty
