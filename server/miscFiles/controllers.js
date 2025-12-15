@@ -1307,7 +1307,7 @@ class PathfindingGrid {
                 if (dist <= halfSize) {
                     const t = 1 - dist / halfSize
                     const basePenalty = 15
-                    const penalty = Math.min(255, basePenalty + Math.pow(t, 4) * 400 | 0)
+                    const penalty = Math.min(255, basePenalty + Math.pow(t, 4) * 700 | 0)
                     const index = y * this.width + x
                     if (penalty > this.grid[index]) {
                         this.grid[index] = penalty
@@ -1538,9 +1538,9 @@ class io_pathfinding extends IO {
                 x: this.body.x,
                 y: this.body.y
             },
-            main: false,
-            alt: false,
-            fire: false,
+            //main: false,
+            //alt: false,
+            //fire: false,
             power: 0,
         }
         this.grid.updateGrid(this.body)
@@ -1729,21 +1729,21 @@ class FarmingControllerState extends ControllerState {
 
         if (validFood.length!=0) {
             const bestFood = validFood[0]
-            const distanceToBestFoodSqr = (this.body.x - bestFood.x) ** 2 + (this.body.y - bestFood.y) ** 2
-            const minimumDistanceToFood = (bestFood.size + this.body.size + 100) ** 2
+            //const distanceToBestFoodSqr = (this.body.x - bestFood.x) ** 2 + (this.body.y - bestFood.y) ** 2
+            //const minimumDistanceToFood = (bestFood.size + this.body.size + 100) ** 2
             this.controller.io.target = {
                 x: bestFood.x - this.body.x,
                 y: bestFood.y - this.body.y
             }
             this.controller.io.main = true
             this.controller.io.fire = true
-            if (distanceToBestFoodSqr>=minimumDistanceToFood) {
+            //if (distanceToBestFoodSqr>=minimumDistanceToFood) {
                 this.controller.io.goal = {
                     x: bestFood.x,
                     y: bestFood.y
                 }
                 this.controller.io.power = 1
-            }
+            //}
             
         } else {
             this.stateMachine.transition("wander")
