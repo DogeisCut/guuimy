@@ -1216,9 +1216,9 @@ class io_scaleWithMaster extends IO {
         }
     }
 }
-// ##################################################
-// Everything below here is for advanced bot AI stuff
-// ##################################################
+// ##########################################################################
+// Everything below here is for dogeiscut's and waffz's advanced bot AI stuff
+// ##########################################################################
 
 /*
 better bot AI suggestions:
@@ -1713,11 +1713,11 @@ class FarmingControllerState extends ControllerState {
         /* ################################################ */
         /* Read \/                                          */
             
-        // I dont think util.getTimeToKill should be trusted this way, as its very inaccurate
+        // I dont think io_advancedBotAI.getTimeToKill should be trusted this way, as its very inaccurate
         // Instead of outright filtering shapes (aside from rediciously long ones) we should apply a penalty for the scoring too. 
         
         // TODO: filter out shapes bots cant reach/pathfind to
-        .filter(food => util.getTimeToKill(this.body, food) < maxTimeWasted)
+        .filter(food => io_advancedBotAI.getTimeToKill(this.body, food) < maxTimeWasted)
         .sort((a,b)=>{   
             const distA = (this.body.x - a.x) ** 2 + (this.body.y - a.y) ** 2;  
             const distB = (this.body.x - b.x) ** 2 + (this.body.y - b.y) ** 2;  
@@ -1784,6 +1784,7 @@ class WanderControllerState extends ControllerState {
 }
 
 //The controller
+// TODO: give this controller (or the states) its own instance of the pathfinder so we can target different shapes/players if pathfinding completley fails
 class io_advancedBotAI extends IO {  
     constructor(body, opts = {}) {  
         super(body);  
@@ -1854,6 +1855,102 @@ class io_advancedBotAI extends IO {
         if ((e.y - m.y) * (e.y - m.y) >= yRange) return false;
         return true;
     }
+    static getTimeToKill(attackerEntity, targetEntity) {  
+        // Helper function to recursively collect all guns from an entity and its turrets  
+        function getAllGuns(entity, collectedGuns = []) {  
+            // Get guns from the entity itself  
+            for (let gun of entity.guns.values()) {  
+                if (gun.canShoot) {  
+                    collectedGuns.push({  
+                        gun: gun,  
+                        owner: entity  
+                    });  
+                }  
+            }  
+            
+            // Recursively get guns from turrets  
+            for (let turret of entity.turrets.values()) {  
+                getAllGuns(turret, collectedGuns);  
+            }  
+            
+            return collectedGuns;  
+        }  
+        
+        // Helper function to get guns that bullets will spawn with  
+        // TODO: consider parent stats too
+        function getBulletGuns(gun) {  
+            let bulletGuns = [];  
+            if (gun.bulletType && gun.bulletType.GUNS) {  
+                // Bullets can have their own guns  
+                for (let gunDef of gun.bulletType.GUNS) {  
+                    // These would need to be evaluated similarly  
+                    bulletGuns.push(gunDef);  
+                }  
+            }  
+            return bulletGuns;  
+        }  
+        
+        // Collect all guns from attacker  
+        let allGuns = getAllGuns(attackerEntity);  
+        
+        let totalDPS = 0;  
+        
+        for (let {gun, owner} of allGuns) {  
+            let bulletStats = gun.interpret();  
+            if (!bulletStats) continue;  
+            
+            let skill = gun.bulletStats === "master" ? owner.skill : gun.bulletStats;  
+            
+            let reloadTime = gun.settings.reload * skill.rld;  
+            let fireRate = 1 / reloadTime;  
+            
+            let bulletSpeed = bulletStats.SPEED * gun.settings.speed;  
+            let bulletMaxSpeed = bulletStats.SPEED;  
+            
+            let speedFactor = bulletMaxSpeed > 0 ? Math.pow(bulletSpeed / bulletMaxSpeed, 0.25) : 1;  
+            let speedMultiplier = Math.min(2, Math.max(speedFactor, 1) * speedFactor);  
+            
+            let attackerResist = owner.health.resist;  
+            let targetResist = targetEntity.health.resist;  
+            let resistDiff = attackerResist - targetResist;  
+            
+            let baseDamage = bulletStats.DAMAGE;  
+            
+            let damagePerHit = Config.damage_multiplier *   
+                baseDamage *   
+                (1 + resistDiff) *   
+                speedMultiplier;  
+            
+            if (owner.settings.damageClass === targetEntity.settings.damageClass) {  
+                damagePerHit *= (1 + targetEntity.heteroMultiplier);  
+            }  
+            
+            if (owner.settings.buffVsFood && targetEntity.settings.damageType === 1) {  
+                damagePerHit *= 3;  
+            }  
+            
+            let gunDPS = damagePerHit * fireRate;  
+            totalDPS += gunDPS;  
+            
+            // Note: This is a simplified calculation. In reality, we'd need to consider:  
+            // - Bullet penetration vs target health  
+            // - Damage effects and ratio effects  
+            // - Regeneration of target  
+            // - Nested Guns (turrets, etc)
+            
+            // Basically this tends to overpredict. Due to this inaccuracies
+        }  
+
+        const overpredictionCompensation = 2
+        
+        let targetHealth = targetEntity.health.amount;  
+        
+        if (totalDPS <= 0) {  
+            return Infinity;
+        }  
+        
+        return (targetHealth / totalDPS) / overpredictionCompensation;  
+    };
 
     think() {
         this.stateMachine.loop()

@@ -537,16 +537,6 @@ function init() {
             }
         },
         {
-            name: "Time To Kill",
-            keys: [[[70, "F"]]],
-            level: 1,
-            run: ({ socket, player }) => {
-                selectedEntities(player, (o) => {
-                    socket.talk("m", 3_000, "" + util.getTimeToKill(player.body, o));
-                });    
-            }
-        },
-        {
             name: "Blast",
             keys: [[[66, "B"]]],
             level: 1,
