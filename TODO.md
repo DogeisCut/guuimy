@@ -8,13 +8,39 @@
         - [X] Single
             - [X] Double
                 - [X] Stack
-            - [ ] Crusher
+                - [X] Triple
+                    - [ ] Quadruple
+                        - [ ] Quintuple
+            - [X] Crusher
                 - Pounder
-            - [ ] Sniper
-        - [ ] Blocker
+                - [ ] Blaster
+                    - Launcher
+                    - [ ] Nuker
+                        - Aura Rockets
+                    - [ ] Popper
+                        - Exploding Rockets
+            - [X] Sniper
+        - [X] Blocker
             - Trapper
         - [X] Commander
             - Director
+            - [ ] Whelmer
+                - Cruiser
+        - [ ] Roller
+            - Smasher
+            - [ ] Scraper
+                - Spike
+            - [ ] Speedster
+                - Faster
+            - [ ] Intoxicator
+                - Smasher with aura
+    - [ ] Isolated Tank Ideas
+        - [ ] Amalgam
+            - Bullets, drones, swarm drones, and traps all in one
+        - [ ] Fumigator
+            - Aura traps
+        - [ ] Some sort of smasher with guns
+
     - [ ] Misc
         - [ ] Remove Arena Closer
         - [X] Base Protectors
@@ -26,6 +52,7 @@
         - Score is reduced half, but gets stronger the higher you are past max level (60). The idea is if you died at like level 60, you'd respawn at level 30. and If you died at like level 600, you'd probably spawn at level 60 or something.
     - [ ] Change level caculation to be more gradual. (so you get to like level 60 wayyyy further)
     - [X] Remove Shield!!
+    - [ ] Upgradeable FOV skill
     - [ ] Merge bullet health and penetration into just bullet penetration.
     - [ ] Shared XP for kills like scenexe (could give percentage notification)
     - [ ] Upgrade Queueing (like diep)
@@ -50,6 +77,7 @@
     - [X] Colors
     - [X] Font
     - [X] Player Names/Score
+    - [ ] Swarm drones are pentagonal. (and just refered to as swarmers)
     - [ ] Tank Tree
     - [ ] Death Screen
     - [ ] Disconnect Screen
