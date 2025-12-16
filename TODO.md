@@ -19,6 +19,8 @@
                         - Aura Rockets
                     - [ ] Popper
                         - Exploding Rockets
+                    - [ ] Carpeter
+                        - Auto turret rockets
             - [X] Sniper
         - [X] Blocker
             - Trapper
@@ -40,6 +42,7 @@
         - [ ] Fumigator
             - Aura traps
         - [ ] Some sort of smasher with guns
+        - [ ] Some auto turret tanks.
 
     - [ ] Misc
         - [ ] Remove Arena Closer
