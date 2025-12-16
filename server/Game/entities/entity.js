@@ -1116,6 +1116,11 @@ class Entity extends EventEmitter {
             }
             this.setKillers(killers);
             this.emit('dead', { body: this, killers, killTools });
+
+            if (this.master.socket && killers.length > 0) {  
+                this.master.socket.spectateEntity = killers[0];  
+            }
+            
             // Kill it
             return 1;
         }
